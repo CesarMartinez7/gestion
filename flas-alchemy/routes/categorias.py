@@ -41,7 +41,6 @@ def ingresar_categoria():
         return respuesta_created("Categoría creada con éxito")
     except Exception as e:
         return jsonify(str(e)), 400
-
 @categorias.route('/actualizar_categorias', methods=['PUT'])	
 
 def actualizar_categoria():
@@ -66,7 +65,11 @@ def actualizar_categoria():
         return jsonify(str(e)), 400
     
 
+
 @categorias.route('/cambiar_estado_categorias', methods=['PUT'])
+
+
+# Cambiar estado de la categoria
 
 def cambiar_estado_categoria():
     try:
