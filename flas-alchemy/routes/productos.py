@@ -2,7 +2,7 @@ import os
 from utils.auth import require_auth
 from utils.respuestas import respuesta_fail
 from flask import Blueprint, request, jsonify
-from services.Productos_queries import ProductosQuery
+from Services.Productos_queries import ProductosQuery
 from utils.respuestas import respuesta_created, respuesta_success
 from utils.Validaciones_productos import validaciones_ingresar_productos, cambiar_estado_productos
 

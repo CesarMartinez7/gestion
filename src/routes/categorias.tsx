@@ -9,11 +9,11 @@ export default function Categorias() {
     fetch("http://127.0.0.1:5000/categorias", {
       method: "POST",
       body: JSON.stringify({
-        nombre: object.nombre,
+        nombre: object.nombre,  
         descripcion: object.descripcion,
         id_categoria: object.id_categoria,
       }),
-    });
+    }).then(    );
   };
 
   useEffect(() => {
@@ -54,17 +54,29 @@ export default function Categorias() {
                           ✕{" "}
                         </button>
                       </form>
-                      <h3 className="font-bold text-lg">Hello {index}!</h3>
-                      <p className="py-4">
-                        {item.descripcion}
-                      </p>
+                      <h3 className="font-bold text-lg uppercase">
+                        {item.nombre}
+                      </h3>
+                      <p className="py-4">{item.descripcion}</p>
                       <div>
-                        <form className="flex flex-col" onSubmit={(e) => {
-                            e.preventDefault()
-                        }}>
-                            <input type="text" placeholder="Descripcion" />
-                            <input type="text" placeholder="Nombre" />
-                            <input type="text" placeholder="" />
+                        <form
+                          className="flex flex-col gap-2"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            handleDeleteCategoria(item)
+                          }}
+                        >
+                          <input
+                            type="text"
+                            placeholder="Descripcion"
+                            className="input w-full"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Nombre"
+                            className="input w-full"
+                          />
+                          <button className="btn btn-neutral">Enviar</button>
                         </form>
                       </div>
                     </div>

@@ -14,7 +14,7 @@ import uuid
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost:3306/alchemy_flask_db'
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173", "methods":["GET", "POST", "PUT", "DELETE"], "allow_headers": ["Content-Type", "Authorization"]}})
+CORS(app, resources={r"/categorias": {"origins": "http://localhost:5173", "methods":["GET", "POST", "PUT", "DELETE"], "allow_headers": ["Content-Type", "Authorization"]}})
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
