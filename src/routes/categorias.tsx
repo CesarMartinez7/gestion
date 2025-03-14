@@ -1,81 +1,30 @@
 import { useEffect, useState, useRef } from "react";
-import { Response } from "../types/response";
-import { Data } from "../types/response";
+
 import { Reorder } from "motion/react";
 import Loading from "../ui/loading";
+import { handleUpdateCategoria,handleClickDelete, handleClickCreate } from "../utils/method-categorias";
+import CategoriaHooks from "../hooks/categoria";
 
-interface CreateHandleClickProps {
-  nombre: string;
-  descripcion: string;
-}
 
 export default function Categorias() {
-  const [data, setData] = useState<Response>();
-  const [isChangeSubmit, setIsChangeSubmit] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<Data | null>(null);
-  const inputRefDescripcion = useRef<HTMLInputElement>(null);
-  const inputRefNombre = useRef<HTMLInputElement>(null);
+  const [data,
+    setData,
+    isChangeSubmit,
+    setIsChangeSubmit,
+    isModalOpen,
+    setIsModalOpen,
+    selectedCategory,
+    setSelectedCategory,
+    inputRefDescripcion,
+    inputRefNombre] = CategoriaHooks()
+  
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
     useState<boolean>(false);
 
   const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement>(null);
   const inputCreateCategoriaElementNombre = useRef<HTMLInputElement>(null);
 
-  const handleClickCreate = (data: CreateHandleClickProps) => {
-    fetch("http://127.0.0.1:5000/ingresar_categorias", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nombre: data.nombre,
-        descripcion: data.descripcion,
-      }),
-    })
-      .then((response) => console.log(response.json()))
-      .then((data) => console.log(data));
-  };
-
-  const handleClickDelete = ({
-    id_categoria,
-    estado,
-  }: {
-    id_categoria: number;
-    estado: number;
-  }) => {
-    fetch("http://127.0.0.1:5000/cambiar_estado_categorias", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        estado: estado,
-        id_categoria: id_categoria,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json))
-      .catch((err) => console.error(err));
-  };
-
-  const handleUpdateCategoria = (object: Data) => {
-    fetch("http://127.0.0.1:5000/actualizar_categorias", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nombre: object.nombre,
-        descripcion: object.descripcion,
-        id_categoria: object.id_categoria,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json))
-      .catch((err) => console.log(err));
-  };
-
+ 
   // Petición para cargar las categorías
   useEffect(() => {
     fetch("http://127.0.0.1:5000/categorias")
@@ -93,7 +42,8 @@ export default function Categorias() {
     setSelectedCategory(null);
   };
 
-  // Si tenemos data, renderizamos
+
+  // Si tenemos sdffffdata, renderizamos
   if (data) {
     return (
       <main className="flex flex-col gap-2">
@@ -165,7 +115,7 @@ export default function Categorias() {
           </button>
         </div>
         <Reorder.Group
-          className="flex gap-2 flex-col"
+          className="flex gap-2 flex-col p-6"
           axis="y"
           values={data.data}
           onReorder={setData}
