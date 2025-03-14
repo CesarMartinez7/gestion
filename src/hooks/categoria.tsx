@@ -10,7 +10,7 @@ export default function CategoriaHooks() {
   const inputRefDescripcion = useRef<HTMLInputElement>(null);
   const inputRefNombre = useRef<HTMLInputElement>(null);
   return [
-    data: data
+    data,
     setData,
     isChangeSubmit,
     setIsChangeSubmit,

@@ -6,6 +6,9 @@ export interface Pedidos {
   }
   
   export interface Data{
+    fecha_pedido: string
+    precio_unitario: number
+    total: string
     cantidad: number
     estado: number
     fecha: string

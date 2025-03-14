@@ -2,10 +2,11 @@ import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Main } from "./routes/lazy-routes";
 import Navbar from "./ui/navbar";
-import Pedidos from "./routes/pedidos";
 import Categorias from "./routes/categorias";
 import Historial from "./routes/historial";
 import Loading from "./ui/loading";
+import PedidosComp from "./routes/pedidos";
+import Productos from "./routes/productos";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
           <Route path="/" element={<Main/>} />
           <Route path="/categorias" element={<Categorias/>} />
           <Route path="historial" element={<Historial/>}/>
-          <Route path="/pedidos" element={<Pedidos/>} />
+          <Route path="/pedidos" element={<PedidosComp/>} />
+          <Route path="/productos" element={<Productos/>} />
         </Routes>
     </BrowserRouter>
   );

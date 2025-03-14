@@ -1,13 +1,23 @@
 import { useEffect, useState, useRef } from "react";
-
 import { Reorder } from "motion/react";
 import Loading from "../ui/loading";
-import { handleUpdateCategoria,handleClickDelete, handleClickCreate } from "../utils/method-categorias";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import {
+  handleUpdateCategoria,
+  handleClickDelete,
+  handleClickCreate,
+} from "../utils/method-categorias";
 import CategoriaHooks from "../hooks/categoria";
+import { Data } from "../types/response";
+import { Response } from "../types/response";
+
+
+
 
 
 export default function Categorias() {
-  const [data,
+  const [
+    data,
     setData,
     isChangeSubmit,
     setIsChangeSubmit,
@@ -16,15 +26,15 @@ export default function Categorias() {
     selectedCategory,
     setSelectedCategory,
     inputRefDescripcion,
-    inputRefNombre] = CategoriaHooks()
-  
+    inputRefNombre,
+  ] = CategoriaHooks();
+
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
     useState<boolean>(false);
 
   const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement>(null);
   const inputCreateCategoriaElementNombre = useRef<HTMLInputElement>(null);
 
- 
   // Petición para cargar las categorías
   useEffect(() => {
     fetch("http://127.0.0.1:5000/categorias")
@@ -41,7 +51,6 @@ export default function Categorias() {
     setIsModalOpen(false);
     setSelectedCategory(null);
   };
-
 
   // Si tenemos sdffffdata, renderizamos
   if (data) {
@@ -71,7 +80,7 @@ export default function Categorias() {
                 method="post"
                 className="flex flex-col gap-2"
                 onSubmit={(e) => {
-                    e.preventDefault()
+                  e.preventDefault();
                   if (
                     inputCreateCategoriaElementDescripcion.current?.value &&
                     inputCreateCategoriaElementNombre.current?.value
@@ -130,18 +139,49 @@ export default function Categorias() {
                 <p className="font-light text-xs">{item.descripcion}</p>
               </div>
               <div className="flex flex-row gap-2">
+               
                 <div>
+                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
                   <button
-                    className="btn btn-neutral"
-                    onClick={() => {
-                      handleClickDelete({
-                        id_categoria: item.id_categoria,
-                        estado: 2,
-                      });
-                    }}
+                    className="btn btn-primary"
+                    onClick={() =>
+                      //@ts-ignore
+                      document.getElementById("my_modal_3").showModal()
+                    }
                   >
-                    Eliminar
+                    Eliminar <Icon icon="fluent-color:dismiss-circle-16" width="30" height="30" />
                   </button>
+                  <dialog id="my_modal_3" className="modal">
+                    <div className="modal-box">
+                      <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
+                      <h3 className="font-bold text-lg">Estas Seguro?</h3>
+                      <p className="py-4">
+                        Estas seguro de eliminar <strong>{item.nombre}</strong> ? ⚠️
+                      </p>
+                      <div className="flex gap-4 ">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn top-2">Cancelar</button>
+                        </form>
+                        <button
+                          className="btn btn-error"
+                          onClick={() => {
+                            handleClickDelete({
+                              id_categoria: item.id_categoria,
+                              estado: 2,
+                            });
+                          }}
+                        >
+                          Eliminar ⚠️
+                        </button>
+                      </div>
+                    </div>
+                  </dialog>
                 </div>
                 <div>
                   <button
@@ -208,5 +248,5 @@ export default function Categorias() {
     );
   }
 
-  return <Loading/>;
+  return <Loading />;
 }
