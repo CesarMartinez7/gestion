@@ -5,12 +5,14 @@ import Navbar from "./ui/navbar";
 import Pedidos from "./routes/pedidos";
 import Categorias from "./routes/categorias";
 import Historial from "./routes/historial";
+import Loading from "./ui/loading";
 
 function App() {
   return (
     <BrowserRouter>
     <Navbar/>
-      <Routes >
+      <Routes>
+        <Route path="loading" element={<Loading/>} />
           <Route path="/" element={<Main/>} />
           <Route path="/categorias" element={<Categorias/>} />
           <Route path="historial" element={<Historial/>}/>

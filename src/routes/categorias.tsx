@@ -3,6 +3,11 @@ import { Response } from "../types/response";
 import { Data } from "../types/response";
 import { Reorder } from "motion/react";
 
+interface CreateHandleClickProps {
+  nombre: string;
+  descripcion: string;
+}
+
 export default function Categorias() {
   const [data, setData] = useState<Response>();
   const [isChangeSubmit, setIsChangeSubmit] = useState<boolean>(false);
@@ -15,6 +20,21 @@ export default function Categorias() {
 
   const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement>(null);
   const inputCreateCategoriaElementNombre = useRef<HTMLInputElement>(null);
+
+  const handleClickCreate = (data: CreateHandleClickProps) => {
+    fetch("http://127.0.0.1:5000/ingresar_categorias", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+      }),
+    })
+      .then((response) => console.log(response.json()))
+      .then((data) => console.log(data));
+  };
 
   const handleClickDelete = ({
     id_categoria,
@@ -77,7 +97,7 @@ export default function Categorias() {
     return (
       <main className="flex flex-col gap-2">
         {isOpenPopoverCreate && (
-          <div className="w-full h-full absolute flex items-center justify-center bg-black/20 z-50 ">
+          <div className="w-full h-full absolute flex items-center justify-center bg-black/20 z-[999] ">
             <div className="w-xl shadow-2xl p-6 bg-base-100 rounded-xl X">
               <div
                 aria-placeholder="Crear categoria"
@@ -93,17 +113,38 @@ export default function Categorias() {
                 </button>
               </div>
 
-              <h1 className="text-2xl text-center font-bold">Crear categoria</h1>
-              <form method="post" className="flex flex-col gap-2">
+              <h1 className="text-2xl text-center font-bold mb-4.5">
+                Crear categoria
+              </h1>
+              <form
+                method="post"
+                className="flex flex-col gap-2"
+                onSubmit={(e) => {
+                    e.preventDefault()
+                  if (
+                    inputCreateCategoriaElementDescripcion.current?.value &&
+                    inputCreateCategoriaElementNombre.current?.value
+                  )
+                    handleClickCreate({
+                      descripcion:
+                        inputCreateCategoriaElementDescripcion.current.value,
+                      nombre: inputCreateCategoriaElementNombre.current.value,
+                    });
+                }}
+              >
+                <label htmlFor="Nombre">Nombre</label>
                 <input
+                  ref={inputCreateCategoriaElementNombre}
                   type="text"
                   className="input w-full"
-                  placeholder="Nombre"
+                  placeholder="Tecnologias"
                 />
+                <label htmlFor="">Descripcion</label>
                 <input
+                  ref={inputCreateCategoriaElementDescripcion}
                   type="text"
                   className="input w-full"
-                  placeholder="Descripcion"
+                  placeholder="Tecnologia de ultima generacion."
                 />
                 <input
                   type="submit"
@@ -131,7 +172,7 @@ export default function Categorias() {
           {data.data.map((item, index) => (
             <Reorder.Item
               key={item.id_categoria}
-              className="flex flex-row rounded-md p-3 border-base-200 border justify-between"
+              className="flex flex-row bg-base-200 rounded-md p-3 border-base-200 border justify-between"
             >
               <div>
                 <p className="font-semibold text-xl uppercase">{item.nombre}</p>
@@ -188,23 +229,26 @@ export default function Categorias() {
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
                 </button>
-                <h3 className="font-bold text-lg uppercase">
-                  {selectedCategory.nombre}
-                </h3>
-                <p>{selectedCategory.descripcion}</p>
-                <input
-                  ref={inputRefNombre}
-                  type="text"
-                  defaultValue={selectedCategory.nombre}
-                  className="input w-full"
-                />
-                <input
-                  ref={inputRefDescripcion}
-                  type="text"
-                  defaultValue={selectedCategory.descripcion}
-                  className="input w-full"
-                />
-                <button className="btn btn-neutral">Enviar</button>
+                <div className="grid grid-cols-1 gap-3">
+                  <h3 className="font-bold text-lg uppercase">
+                    {selectedCategory.nombre}
+                  </h3>
+                  <p className="text-sm">{selectedCategory.descripcion}</p>
+
+                  <input
+                    ref={inputRefNombre}
+                    type="text"
+                    defaultValue={selectedCategory.nombre}
+                    className="input w-full"
+                  />
+                  <input
+                    ref={inputRefDescripcion}
+                    type="text"
+                    defaultValue={selectedCategory.descripcion}
+                    className="input w-full"
+                  />
+                  <button className="btn btn-neutral">Enviar</button>
+                </div>
               </form>
             </div>
           </dialog>
