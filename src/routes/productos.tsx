@@ -1,11 +1,14 @@
 import {useState,useEffect } from "react"
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Response } from "../types/productos";
+import CategoriaHooks from "../hooks/categoria";
 
 
 export default function ProductosHooks () { 
+    const [] = CategoriaHooks()
 
     const [dataProductos,setDataProductos] = useState<Response>()
+    
 
     useEffect(() => {
         fetch("http://127.0.0.1:5000/productos")
