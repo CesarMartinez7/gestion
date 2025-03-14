@@ -7,11 +7,13 @@ import Historial from "./routes/historial";
 import Loading from "./ui/loading";
 import PedidosComp from "./routes/pedidos";
 import Productos from "./routes/productos";
+import SiderBar from "./ui/sidebar";
 
 function App() {
   return (
     <BrowserRouter>
     <Navbar/>
+    <SiderBar/>
       <Routes>
         <Route path="loading" element={<Loading/>} />
           <Route path="/" element={<Main/>} />
