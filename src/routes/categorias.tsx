@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Response } from "../types/response";
 import { Data } from "../types/response";
 import { Reorder } from "motion/react";
+import Loading from "../ui/loading";
 
 interface CreateHandleClickProps {
   nombre: string;
@@ -257,5 +258,5 @@ export default function Categorias() {
     );
   }
 
-  return <div>Loading...</div>;
+  return <Loading/>;
 }
