@@ -1,13 +1,20 @@
 import { useEffect, useState, useRef } from "react";
 import { Response } from "../types/response";
 import { Data } from "../types/response";
+import { Reorder } from "motion/react";
 
 export default function Categorias() {
   const [data, setData] = useState<Response>();
+  const [isChangeSubmit, setIsChangeSubmit] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<Data | null>(null); 
+  const [selectedCategory, setSelectedCategory] = useState<Data | null>(null);
   const inputRefDescripcion = useRef<HTMLInputElement>(null);
   const inputRefNombre = useRef<HTMLInputElement>(null);
+  const [isOpenPopoverCreate, setIsOpenCreatePopover] =
+    useState<boolean>(false);
+
+  const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement>(null);
+  const inputCreateCategoriaElementNombre = useRef<HTMLInputElement>(null);
 
   const handleClickDelete = ({
     id_categoria,
@@ -28,7 +35,7 @@ export default function Categorias() {
     })
       .then((response) => response.json())
       .then((json) => console.log(json))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   const handleUpdateCategoria = (object: Data) => {
@@ -53,7 +60,7 @@ export default function Categorias() {
     fetch("http://127.0.0.1:5000/categorias")
       .then((response) => response.json())
       .then((data) => setData(data));
-  }, []);
+  }, [isModalOpen]);
 
   const handleModalOpen = (index: number) => {
     setSelectedCategory(data?.data[index] || null);
@@ -69,12 +76,60 @@ export default function Categorias() {
   if (data) {
     return (
       <main className="flex flex-col gap-2">
+        {isOpenPopoverCreate && (
+          <div className="w-full h-full absolute flex items-center justify-center bg-black/20 z-50 ">
+            <div className="w-xl shadow-2xl p-6 bg-base-100 rounded-xl X">
+              <div
+                aria-placeholder="Crear categoria"
+                className="flex justify-end items-end"
+              >
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setIsOpenCreatePopover(!isOpenPopoverCreate);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <h1 className="text-2xl text-center font-bold">Crear categoria</h1>
+              <form method="post" className="flex flex-col gap-2">
+                <input
+                  type="text"
+                  className="input w-full"
+                  placeholder="Nombre"
+                />
+                <input
+                  type="text"
+                  className="input w-full"
+                  placeholder="Descripcion"
+                />
+                <input
+                  type="submit"
+                  className="btn btn-neutral"
+                  value={"Crear Categoria"}
+                />
+              </form>
+            </div>
+          </div>
+        )}
         <div className="flex justify-end">
-          <button className="btn">Crear Categoria</button>
+          <button
+            className="btn"
+            onClick={() => setIsOpenCreatePopover(!isOpenPopoverCreate)}
+          >
+            Crear Categoria
+          </button>
         </div>
-        <div className="flex gap-2 flex-col">
+        <Reorder.Group
+          className="flex gap-2 flex-col"
+          axis="y"
+          values={data.data}
+          onReorder={setData}
+        >
           {data.data.map((item, index) => (
-            <div
+            <Reorder.Item
               key={item.id_categoria}
               className="flex flex-row rounded-md p-3 border-base-200 border justify-between"
             >
@@ -105,9 +160,9 @@ export default function Categorias() {
                   </button>
                 </div>
               </div>
-            </div>
+            </Reorder.Item>
           ))}
-        </div>
+        </Reorder.Group>
 
         {/* Modal */}
         {isModalOpen && selectedCategory && (
@@ -127,6 +182,7 @@ export default function Categorias() {
                     });
                   }
                   handleModalClose();
+                  setIsChangeSubmit(!isChangeSubmit);
                 }}
               >
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
