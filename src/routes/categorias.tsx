@@ -32,9 +32,8 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {/* row 1 */}
           {Data.data.map((item, index) => (
-            <tr>
+            <tr key={item.id_categoria}>
               <th>{index + 1}</th>
               <td className="font-semibold">{item.nombre}</td>
               <td>{item.descripcion}</td>
@@ -216,7 +215,7 @@ export default function Categorias() {
           </div>
         )}
 
-        {/* Botón para abrir la modal */}
+        {/* Botonn para abrir la modal */}
         <div className="flex justify-end gap-2">
           <button
             className="btn btn-sm btn-neutral"

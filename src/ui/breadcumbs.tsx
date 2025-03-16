@@ -14,8 +14,8 @@ export default function BreadCumbs({Rutas}: {Rutas: PathBreadCumbs[]}) {
 
     <div className="breadcrumbs text-xs">
       <ul>
-        {Rutas.map((ruta) => (
-            <li>
+        {Rutas.map((ruta,index) => (
+            <li key={index + new Date().getFullYear()}>
                 <Link to={`${ruta.to}`} >{ruta.nombre}</Link>
             </li>
         ))}
