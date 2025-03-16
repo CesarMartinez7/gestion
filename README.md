@@ -33,7 +33,7 @@ Red 5G Gestión es una plataforma diseñada para la administración y monitoreo 
 - Tener npm (gestor de paquetes de Node.js) instalado
 
 ## Estructura del proyecto
-La carpeta del frontend se encuentra en la carpeta base del proyecto:
+El __Frontend__ se encuentra en la carpeta base del proyecto:
 ```
 gestion/
 ├── flask-backend/

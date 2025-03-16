@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { Reorder } from "motion/react";
 import Loading from "../ui/loading";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
@@ -11,9 +10,99 @@ import CategoriaHooks from "../hooks/categoria";
 import { Data } from "../types/response";
 import { Response } from "../types/response";
 
-
-
-
+const Table = ({
+  Data,
+  handleModalOpen,
+}: {
+  Data: Response;
+  handleModalOpen: Function;
+}) => {
+  return (
+    <div className="overflow-x-auto">
+      <table className="table table-sm">
+        {/* head */}
+        <thead>
+          <tr>
+            <th></th>
+            <th >Nombre</th>
+            <th>Descripcion</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* row 1 */}
+          {Data.data.map((item, index) => (
+            <tr>
+              <th>{index + 1}</th>
+              <td className="font-semibold">{item.nombre}</td>
+              <td>{item.descripcion}</td>
+              <td className="flex gap-2  justify-end">
+                <div>
+                  <button
+                    className="btn btn-soft btn-info btn-sm"
+                    onClick={() => handleModalOpen(index)}
+                  >
+                    Actualizar
+                  </button>
+                </div>
+                <div>
+                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                  <button
+                    className="btn btn-error btn-soft btn-sm"
+                    onClick={() =>
+                      //@ts-ignore
+                      document.getElementById("my_modal_3").showModal()
+                    }
+                  >
+                    Eliminar{" "}
+                    <Icon
+                      icon="fluent-color:dismiss-circle-16"
+                      width="20"
+                      height="20"
+                    />
+                  </button>
+                  <dialog id="my_modal_3" className="modal">
+                    <div className="modal-box">
+                      <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
+                      <h3 className="font-bold text-lg">Estas Seguro?</h3>
+                      <p className="py-4">
+                        Estas seguro de eliminar <strong>{item.nombre}</strong>{" "}
+                        ? ⚠️
+                      </p>
+                      <div className="flex gap-4 ">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn top-2">Cancelar</button>
+                        </form>
+                        <button
+                          className="btn "
+                          onClick={() => {
+                            handleClickDelete({
+                              id_categoria: item.id_categoria,
+                              estado: 2,
+                            });
+                          }}
+                        >
+                          Eliminar ⚠️
+                        </button>
+                      </div>
+                    </div>
+                  </dialog>
+                </div>
+              </td>
+            </tr>
+          ))}
+          {/* row 2 */}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 export default function Categorias() {
   const [
@@ -52,33 +141,31 @@ export default function Categorias() {
     setSelectedCategory(null);
   };
 
-  // Si tenemos sdffffdata, renderizamos
+  // If i have data, come here, si no tenemos entonces se va al loading componente XD
   if (data) {
     return (
-      <main className="flex flex-col gap-2">
+      <main className="flex flex-col gap-2 p-8">
+        <h1 className="text-xl">Categorías</h1>
         {isOpenPopoverCreate && (
-          <div className="w-full h-full absolute flex items-center justify-center bg-black/20 z-[999] ">
-            <div className="w-xl shadow-2xl p-6 bg-base-100 rounded-xl X">
-              <div
-                aria-placeholder="Crear categoria"
-                className="flex justify-end items-end"
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[999]">
+            <div className="w-full max-w-lg bg-base-100 shadow-2xl p-6 rounded-xl relative">
+              {/* Botón de cierre */}
+              <button
+                className="absolute top-4 right-4 text-lg cursor-pointer"
+                onClick={() => setIsOpenCreatePopover(false)}
               >
-                <button
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setIsOpenCreatePopover(!isOpenPopoverCreate);
-                  }}
-                >
-                  ✕
-                </button>
-              </div>
+                ✕
+              </button>
 
-              <h1 className="text-2xl text-center font-bold mb-4.5">
-                Crear categoria
+              {/* Título */}
+              <h1 className="text-2xl text-center font-bold mb-6">
+                Crear Categoría
               </h1>
+
+              {/* Formulario */}
               <form
                 method="post"
-                className="flex flex-col gap-2"
+                className="flex flex-col gap-4"
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (
@@ -92,113 +179,53 @@ export default function Categorias() {
                     });
                 }}
               >
-                <label htmlFor="Nombre">Nombre</label>
+                <label htmlFor="nombre" className="font-medium">
+                  Nombre
+                </label>
                 <input
                   ref={inputCreateCategoriaElementNombre}
+                  id="nombre"
                   type="text"
                   className="input w-full"
-                  placeholder="Tecnologias"
+                  placeholder="Tecnologías"
+                  required
                 />
-                <label htmlFor="">Descripcion</label>
+
+                <label htmlFor="descripcion" className="font-medium">
+                  Descripción
+                </label>
                 <input
                   ref={inputCreateCategoriaElementDescripcion}
+                  id="descripcion"
                   type="text"
                   className="input w-full"
-                  placeholder="Tecnologia de ultima generacion."
+                  placeholder="Tecnología de última generación."
+                  required
                 />
+
                 <input
                   type="submit"
-                  className="btn btn-neutral"
-                  value={"Crear Categoria"}
+                  className="btn btn-neutral mt-2"
+                  value="Crear Categoría"
                 />
               </form>
             </div>
           </div>
         )}
+
+        {/* Botón para abrir la modal */}
         <div className="flex justify-end">
           <button
-            className="btn"
+            className="btn btn-secondary"
             onClick={() => setIsOpenCreatePopover(!isOpenPopoverCreate)}
           >
-            Crear Categoria
+            Crear Categoría
           </button>
         </div>
-        <Reorder.Group
-          className="flex gap-2 flex-col p-6"
-          axis="y"
-          values={data.data}
-          onReorder={setData}
-        >
-          {data.data.map((item, index) => (
-            <Reorder.Item
-              key={item.id_categoria}
-              className="flex flex-row bg-base-200 rounded-md p-3 border-base-200 border justify-between"
-            >
-              <div>
-                <p className="font-semibold text-xl uppercase">{item.nombre}</p>
-                <p className="font-light text-xs">{item.descripcion}</p>
-              </div>
-              <div className="flex flex-row gap-2">
-               
-                <div>
-                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                  <button
-                    className="btn btn-primary"
-                    onClick={() =>
-                      //@ts-ignore
-                      document.getElementById("my_modal_3").showModal()
-                    }
-                  >
-                    Eliminar <Icon icon="fluent-color:dismiss-circle-16" width="30" height="30" />
-                  </button>
-                  <dialog id="my_modal_3" className="modal">
-                    <div className="modal-box">
-                      <form method="dialog">
-                        {/* if there is a button in form, it will close the modal */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                          ✕
-                        </button>
-                      </form>
-                      <h3 className="font-bold text-lg">Estas Seguro?</h3>
-                      <p className="py-4">
-                        Estas seguro de eliminar <strong>{item.nombre}</strong> ? ⚠️
-                      </p>
-                      <div className="flex gap-4 ">
-                        <form method="dialog">
-                          {/* if there is a button in form, it will close the modal */}
-                          <button className="btn top-2">Cancelar</button>
-                        </form>
-                        <button
-                          className="btn btn-error"
-                          onClick={() => {
-                            handleClickDelete({
-                              id_categoria: item.id_categoria,
-                              estado: 2,
-                            });
-                          }}
-                        >
-                          Eliminar ⚠️
-                        </button>
-                      </div>
-                    </div>
-                  </dialog>
-                </div>
-                <div>
-                  <button
-                    className="btn"
-                    onClick={() => handleModalOpen(index)}
-                  >
-                    Actualizar
-                  </button>
-                </div>
-              </div>
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
 
         {/* Modal */}
         {isModalOpen && selectedCategory && (
-          <dialog open className="modal">
+          <dialog open className="modal ">
             <div className="modal-box">
               <form
                 onSubmit={(e) => {
@@ -244,6 +271,7 @@ export default function Categorias() {
             </div>
           </dialog>
         )}
+        <Table Data={data} handleModalOpen={handleModalOpen} />
       </main>
     );
   }

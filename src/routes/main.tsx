@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Main() {
   return (
-    <div className="w-full  h-screen flex items-center justify-center flex-col">
+    <div className="w-full   flex items-center justify-center flex-col">
       <h1 className="text-6xl mb-12">
         Lorem ipsum dolor, sit amet consectetur adipisicing.
       </h1>
