@@ -1,5 +1,5 @@
 
-import { Categoria } from "../types/response"
+
 
 export default function List(){
     

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Response } from "../types/productos";
 import CategoriaHooks from "../hooks/categoria";
 import { Data } from "../types/productos";

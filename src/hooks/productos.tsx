@@ -4,7 +4,7 @@ import { Response } from "../types/productos";
 
 export default function ProductosHooks () { 
 
-    const [dataProductos,setDataProductos] = useState<Response>()
+    const [dataProductos] = useState<Response>()
 
     useEffect(() => {
         fetch("http://127.0.0.1:5000/productos")
