@@ -4,7 +4,7 @@ import Red5GLogo from "../assets/red5glogo1.png"
 
 export default function Navbar() {
   return (
-    <div className="navbar bg-base-100 shadow-sm px-10">
+    <div className="navbar bg-black text-white shadow-sm px-10">
       <div className="flex-1">
         <Link to={"/"}>
           <img src={Red5GLogo} alt="" width={60} height={30} />

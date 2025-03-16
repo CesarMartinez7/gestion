@@ -14,7 +14,7 @@ export default function SiderBar() {
           htmlFor="my-drawer-2"
           className="btn btn-primary btn-sm drawer-button lg:hidden"
         >
-          Open drawer
+          Barra Lateral
         </label>
 
         {/* Aquí se renderiza la página actual */}

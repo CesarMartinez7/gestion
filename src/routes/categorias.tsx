@@ -13,13 +13,15 @@ import BreadCumbs from "../ui/breadcumbs";
 const Table = ({
   Data,
   handleModalOpen,
+  isBig
 }: {
   Data: Response;
   handleModalOpen: Function;
+  isBig: boolean
 }) => {
   return (
     <div className="overflow-x-auto">
-      <table className="table table-sm">
+      <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
         {/* head */}
         <thead>
           <tr>
@@ -113,6 +115,8 @@ export default function Categorias() {
     setSelectedCategory,
     inputRefDescripcion,
     inputRefNombre,
+    isBig,
+    setIsBig
   ] = CategoriaHooks();
 
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
@@ -213,13 +217,14 @@ export default function Categorias() {
         )}
 
         {/* Botón para abrir la modal */}
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
           <button
-            className="btn btn-secondary"
+            className="btn btn-sm btn-neutral"
             onClick={() => setIsOpenCreatePopover(!isOpenPopoverCreate)}
           >
             Crear Categoría
           </button>
+          <button className="btn btn-sm" onClick={() => setIsBig(!isBig)} > {isBig ? "Minimizar" : "Maximizar"} </button>
         </div>
 
         {/* Modal */}
@@ -270,7 +275,7 @@ export default function Categorias() {
             </div>
           </dialog>
         )}
-        <Table Data={data} handleModalOpen={handleModalOpen} />
+        <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} />
       </main>
     );
   }

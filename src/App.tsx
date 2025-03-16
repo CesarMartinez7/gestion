@@ -22,7 +22,7 @@ function App() {
           <Route path="categorias" element={<Categorias />} />
           <Route path="historial" element={<Historial />} />
           <Route path="pedidos" element={<PedidosComp />} />
-          <Route path="productos" element={<Productos />} />
+          <Route path="productos" element={<Productos name="Productos" />} />
           <Route path="login" element={<UserRegistrer/>} />
           <Route path="*" element={<NotFoundPage/>} />
         </Route>

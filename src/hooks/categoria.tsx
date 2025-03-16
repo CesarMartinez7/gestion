@@ -12,7 +12,9 @@ type CategoriaHooksReturn = [
   Data | null,
   React.Dispatch<React.SetStateAction<Data | null>>,
   React.RefObject<HTMLInputElement | null > ,
-  React.RefObject<HTMLInputElement | null> 
+  React.RefObject<HTMLInputElement | null>,
+  boolean,
+  React.Dispatch<React.SetStateAction<boolean>>
 ];
 
 export default function CategoriaHooks(): CategoriaHooksReturn {
@@ -22,6 +24,7 @@ export default function CategoriaHooks(): CategoriaHooksReturn {
   const [selectedCategory, setSelectedCategory] = useState<Data | null>(null);
   const inputRefDescripcion = useRef<HTMLInputElement | null>(null);
   const inputRefNombre = useRef<HTMLInputElement | null>(null);
+  const [isBig,setIsBig] = useState<boolean>(false)
 
   return [
     data,
@@ -34,5 +37,7 @@ export default function CategoriaHooks(): CategoriaHooksReturn {
     setSelectedCategory,
     inputRefDescripcion,
     inputRefNombre,
+    isBig,
+    setIsBig
   ];
 }
