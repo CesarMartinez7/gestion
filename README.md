@@ -1,55 +1,82 @@
- # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Red 5G Gestión
 
-Currently, two official plugins are available:
+## Descripción
+Red 5G Gestión es una plataforma diseñada para la administración y monitoreo de redes 5G. Utiliza tecnologías modernas para ofrecer una interfaz ágil y un backend robusto.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+# Instalación y configuración
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
- 
- ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Instrucciones para ejecutar el servidor Flask
+
+
+
+### Pasos de ejecución
+
+1. Entrar a la carpeta flask-backend
+   ```bash
+   cd flask-backend
+   ```
+
+2. Ejecutar el siguiente comando para iniciar el servidor Flask
+   ```bash
+   python -m flask --app index.py run --debug
+   ```
+
+3. Dejar la ventana, terminal o consola abierta para ejecutar las peticiones
+
+# Instrucciones para ejecutar el Frontend
+
+### Requisitos previos para frontend
+- Tener [Node.js](https://nodejs.org/) instalado
+- Tener npm (gestor de paquetes de Node.js) instalado
+
+## Estructura del proyecto
+La carpeta del frontend se encuentra en la carpeta base del proyecto:
+```
+gestion/
+├── flask-backend/
+│   └── ... 
+├── src/
+├── public/
+├── package.json
+└── ...
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Pasos de ejecución
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Navegar a la carpeta del frontend (desde la raíz del proyecto)
+   ```bash
+   cd frontend
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+2. Instalar dependencias y paquetes
+   ```bash
+   npm install
+   ```
+
+3. Ejecutar el frontend en modo Desarrollo
+   ```bash
+   npm run dev
+   ```
+
+## Notas importantes
+- La aplicación de desarrollo normalmente se ejecutará en `http://localhost:3000/` o en el primer puerto disponible
+- Los cambios en el código se reflejarán automáticamente en el navegador gracias al hot-reload
+
+
+## Notas importantes
+- El modo `--debug` permite que el servidor se reinicie automáticamente cuando detecta cambios en los archivos
+- Asegúrate de tener Flask instalado (`pip install flask`)
+- El servidor estará disponible en `http://127.0.0.1:5000/` por defecto
+
+
+
+
+
+### Requisitos previos
+- Node.js y npm instalados
+- Python 3.x instalado
+- XAMPP instalado y configurado
+
