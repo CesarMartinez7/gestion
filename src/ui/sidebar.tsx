@@ -12,7 +12,7 @@ export default function SiderBar() {
         {/* Botón para abrir el sidebar en pantallas pequeñas */}
         <label
           htmlFor="my-drawer-2"
-          className="btn btn-primary drawer-button lg:hidden"
+          className="btn btn-primary btn-sm drawer-button lg:hidden"
         >
           Open drawer
         </label>
@@ -37,13 +37,14 @@ export default function SiderBar() {
             </a>
           </li>
           {routers.map((route) => (
-            <li key={route.route} className="text-xs">
+            <li key={route.route} className="text-xs ">
               <Link
                 to={`/${route.route}`}
-                className="ml-1.5 w-full justify-start"
+                className="ml-1.5 w-full justify-start "
               >
                 <Icon icon={`lucide:${route.icon}`} width="16" height="16" />
                 {route.name}
+
               </Link>
             </li>
           ))}

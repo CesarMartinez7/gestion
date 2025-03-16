@@ -9,6 +9,8 @@ import {
 import CategoriaHooks from "../hooks/categoria";
 import { Data } from "../types/response";
 import { Response } from "../types/response";
+import BreadCumbs from "../ui/breadcumbs";
+import { PathBreadCumbs } from "../ui/breadcumbs";
 
 const Table = ({
   Data,
@@ -144,14 +146,15 @@ export default function Categorias() {
   // If i have data, come here, si no tenemos entonces se va al loading componente XD
   if (data) {
     return (
-      <main className="flex flex-col gap-2 p-8">
-        <h1 className="text-xl">Categorías</h1>
+      <main className="flex flex-col gap-2 px-8">
+        <BreadCumbs Rutas={Rutas} />
+        <h1 className="text-xl font-bold">Categorías</h1>
         {isOpenPopoverCreate && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[999]">
             <div className="w-full max-w-lg bg-base-100 shadow-2xl p-6 rounded-xl relative">
               {/* Botón de cierre */}
               <button
-                className="absolute top-4 right-4 text-lg cursor-pointer"
+                className="absolute top-4 right-4 text-md cursor-pointer btn btn-circle btn-ghost btn-xs"
                 onClick={() => setIsOpenCreatePopover(false)}
               >
                 ✕
@@ -165,7 +168,7 @@ export default function Categorias() {
               {/* Formulario */}
               <form
                 method="post"
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (
@@ -179,7 +182,7 @@ export default function Categorias() {
                     });
                 }}
               >
-                <label htmlFor="nombre" className="font-medium">
+                <label htmlFor="nombre" className="text-sm">
                   Nombre
                 </label>
                 <input
@@ -191,7 +194,7 @@ export default function Categorias() {
                   required
                 />
 
-                <label htmlFor="descripcion" className="font-medium">
+                <label htmlFor="descripcion" className="font-medium text-sm">
                   Descripción
                 </label>
                 <input
@@ -278,3 +281,15 @@ export default function Categorias() {
 
   return <Loading />;
 }
+
+
+
+const Rutas  = [
+  {
+    nombre: "Tabla",
+    to: "tablas"
+  },{
+    nombre: "Categoria",
+    to: "categoria"
+  }
+]

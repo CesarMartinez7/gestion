@@ -1,8 +1,9 @@
 
 # Red 5G Gestión
 
-## Descripción
-Red 5G Gestión es una plataforma diseñada para la administración y monitoreo de redes 5G. Utiliza tecnologías modernas para ofrecer una interfaz ágil y un backend robusto.
+Red 5G Gestión es una plataforma diseñada para la administración y monitoreo de redes 5G. Utiliza tecnologías modernas como React y Tailwind.
+
+![Image Preview Gestion](./preview.png)
 
 
 # Instalación y configuración

@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
 
 import Navbar from "./ui/navbar";
 import SiderBar from "./ui/sidebar";
+import Footer from "./ui/footer";
 
 const Layout = () => {
   return (
@@ -10,6 +10,7 @@ const Layout = () => {
       <div className="content">
         <SiderBar />
       </div>
+      <Footer/>
     </div>
   );
 };

@@ -24,26 +24,20 @@ export default function Navbar() {
 
 export const routers = [
   {
-    name: "Pedidos",
-    route: "pedidos",
-    icon: "box",
-  },
-  {
-    name: "Categorias",
+    name: "Categorías",
     route: "categorias",
     icon: "grid-2x2-check",
-  },
-  {
-    name: "Historial",
-    route: "historial",
-    subpath: ["categorias", "pedidos", "producto"],
-    icon: "history",
   },
   {
     name: "Productos",
     route: "productos",
     icon: "tags",
   },
+  {
+    name: "Pedidos",
+    route: "pedidos",
+    icon: "box",
+  }
 ];
 
 
