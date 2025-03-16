@@ -7,10 +7,8 @@ import {
   handleClickCreate,
 } from "../utils/method-categorias";
 import CategoriaHooks from "../hooks/categoria";
-import { Data } from "../types/response";
 import { Response } from "../types/response";
 import BreadCumbs from "../ui/breadcumbs";
-import { PathBreadCumbs } from "../ui/breadcumbs";
 
 const Table = ({
   Data,
@@ -26,7 +24,7 @@ const Table = ({
         <thead>
           <tr>
             <th></th>
-            <th >Nombre</th>
+            <th>Nombre</th>
             <th>Descripcion</th>
             <th>Opciones</th>
           </tr>
@@ -84,10 +82,7 @@ const Table = ({
                         <button
                           className="btn "
                           onClick={() => {
-                            handleClickDelete({
-                              id_categoria: item.id_categoria,
-                              estado: 2,
-                            });
+                            handleClickDelete({id_categoria: item.id_categoria,estado: 2})
                           }}
                         >
                           Eliminar ⚠️
@@ -131,7 +126,7 @@ export default function Categorias() {
     fetch("http://127.0.0.1:5000/categorias")
       .then((response) => response.json())
       .then((data) => setData(data));
-  }, [isModalOpen]);
+  }, [isChangeSubmit]);
 
   const handleModalOpen = (index: number) => {
     setSelectedCategory(data?.data[index] || null);
@@ -180,6 +175,7 @@ export default function Categorias() {
                         inputCreateCategoriaElementDescripcion.current.value,
                       nombre: inputCreateCategoriaElementNombre.current.value,
                     });
+                  setIsChangeSubmit(!isChangeSubmit);
                 }}
               >
                 <label htmlFor="nombre" className="text-sm">
@@ -282,14 +278,13 @@ export default function Categorias() {
   return <Loading />;
 }
 
-
-
-const Rutas  = [
+const Rutas = [
   {
     nombre: "Tabla",
-    to: "tablas"
-  },{
+    to: "tablas",
+  },
+  {
     nombre: "Categoria",
-    to: "categoria"
-  }
-]
+    to: "categoria",
+  },
+];
