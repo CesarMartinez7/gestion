@@ -22,7 +22,7 @@ const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
     return <h1>Activo</h1>
   } else if (opciones === Opciones.INACTIVO) {
     return <h1>Inactivo</h1>
-  }else if (opciones === Opciones.CANCELADO) {
+  } else if (opciones === Opciones.CANCELADO) {
     return <h1>Cancelado</h1>
   } else if (opciones === Opciones.ENTREGADO) {
     return <h1>Entregado</h1>
@@ -45,8 +45,7 @@ export default function PedidosComp() {
   useEffect(() => {
     fetch("http://127.0.0.1:5000/pedidos")
       .then((reponse) => reponse.json())
-      .then((pedidos) => 
-      {
+      .then((pedidos) => {
         setData(pedidos)
         console.log(data)
       });
@@ -55,11 +54,14 @@ export default function PedidosComp() {
   return (
     <div className="flex flex-col gap-2 px-8">
       <div>
-      <BreadCumbs Rutas={Rutas} />
+        <BreadCumbs Rutas={Rutas} />
 
       </div>
       <div>
         <h3 className="font-bold text-xl">Pedidos</h3>
+      </div>
+      <div className="flex justify-end gap-2">
+        <button className="btn">Crear Pedidos</button><button className="btn">Maximizar</button>
       </div>
       <div className="overflow-x-auto">
         <table className="table table-sm">
@@ -70,7 +72,7 @@ export default function PedidosComp() {
               <th>Cantidad</th>
               <th>Fecha</th>
               <td>Id Producto</td>
-
+              <td>Opciones</td>
             </tr>
           </thead>
           <tbody>
@@ -92,6 +94,10 @@ const ItemTable = ({ item, index }: { item: Data, index: number }) => {
       <td>{item.cantidad}</td>
       <td>{item.fecha}</td>
       <td>{item.id_producto}</td>
+      <td className="flex gap-2 w-full justify-end">
+        <button className="btn btn-soft btn-sm btn-info">Actualizar</button><button className="btn btn-soft btn-sm btn-error">Eliminar</button>
+      </td>
+
 
 
     </tr>

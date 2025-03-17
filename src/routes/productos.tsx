@@ -233,6 +233,7 @@ const Table = ({
         <button
           className="btn btn-soft btn-info btn-sm"
           onClick={() =>
+            //@ts-ignore
             document.getElementById(`my_modal_${index}`)?.showModal()
           }
         >

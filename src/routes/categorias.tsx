@@ -52,7 +52,7 @@ const Table = ({
                     className="btn btn-error btn-soft btn-sm"
                     onClick={() =>
                       //@ts-ignore
-                      document.getElementById("my_modal_3").showModal()
+                      document.getElementById(`my_modal_${index}`).showModal()
                     }
                   >
                     Eliminar{" "}
@@ -62,7 +62,7 @@ const Table = ({
                       height="20"
                     />
                   </button>
-                  <dialog id="my_modal_3" className="modal">
+                  <dialog id={`my_modal_${index}`} className="modal">
                     <div className="modal-box">
                       <form method="dialog">
                         {/* if there is a button in form, it will close the modal */}
@@ -83,7 +83,7 @@ const Table = ({
                         <button
                           className="btn "
                           onClick={() => {
-                            handleClickDelete({id_categoria: item.id_categoria,estado: 2})
+                            handleClickDelete({id_categoria: item.id_categoria, estado: 2});
                           }}
                         >
                           Eliminar ⚠️
@@ -129,7 +129,7 @@ export default function Categorias() {
     fetch("http://127.0.0.1:5000/categorias")
       .then((response) => response.json())
       .then((data) => setData(data));
-  }, [isChangeSubmit]);
+  }, [isChangeSubmit]);  // Dependemos de isChangeSubmit
 
   const handleModalOpen = (index: number) => {
     setSelectedCategory(data?.data[index] || null);
@@ -141,7 +141,7 @@ export default function Categorias() {
     setSelectedCategory(null);
   };
 
-  // If i have data, come here, si no tenemos entonces se va al loading componente XD
+  // Si tenemos datos, renderizamos
   if (data) {
     return (
       <main className="flex flex-col gap-2 px-8">
@@ -172,13 +172,14 @@ export default function Categorias() {
                   if (
                     inputCreateCategoriaElementDescripcion.current?.value &&
                     inputCreateCategoriaElementNombre.current?.value
-                  )
+                  ){
                     handleClickCreate({
                       descripcion:
                         inputCreateCategoriaElementDescripcion.current.value,
                       nombre: inputCreateCategoriaElementNombre.current.value,
                     });
-                  setIsChangeSubmit(!isChangeSubmit);
+                    setIsChangeSubmit(!isChangeSubmit); // Cambiamos el estado para recargar los datos
+                  }
                 }}
               >
                 <label htmlFor="nombre" className="text-sm">
@@ -215,7 +216,7 @@ export default function Categorias() {
           </div>
         )}
 
-        {/* Botonn para abrir la modal */}
+        {/* Botón para abrir la modal */}
         <div className="flex justify-end gap-2">
           <button
             className="btn btn-sm btn-neutral"
@@ -244,7 +245,7 @@ export default function Categorias() {
                     });
                   }
                   handleModalClose();
-                  setIsChangeSubmit(!isChangeSubmit);
+                  setIsChangeSubmit(!isChangeSubmit); // Cambiar el estado para actualizar los datos
                 }}
               >
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
