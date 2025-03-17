@@ -66,9 +66,7 @@ def actualizar_producto():
             "descripcion": request.json["descripcion"],
             "cantidad": request.json["cantidad"],
             "precio": request.json["precio"],
-            
 
-           
         }
         
         ProductosQuery.actualizar_producto(valores_productos)

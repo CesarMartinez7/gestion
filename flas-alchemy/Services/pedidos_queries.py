@@ -3,6 +3,9 @@ from utils.save import save_changes
 from models.productos import Productos
 from models.historia_cambios_pedidos import HistorialCambiosPedidos
 
+
+# 1 : Inactivo
+# 2 : Activo
 pendiente = 3
 en_proceso = 4
 entregado = 5
