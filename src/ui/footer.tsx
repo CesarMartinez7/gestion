@@ -1,5 +1,5 @@
 
-import Red5GLogo from "../assets/red5glogo1.png"
+import Red5GLogo from "../assets/red5gLogoWhite.png"
 
 export default function Footer(){
 	return(
