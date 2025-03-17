@@ -278,7 +278,7 @@ export default function Categorias() {
       </main>
     );
   }
-
+  
   return <Loading />;
 }
 

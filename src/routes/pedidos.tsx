@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Pedidos } from "../types/pedidos";
+import { Data } from "../types/pedidos";
+import BreadCumbs from "../ui/breadcumbs";
 
 export default function PedidosComp() {
   const [data, setData] = useState<Pedidos>();
@@ -8,21 +10,54 @@ export default function PedidosComp() {
     fetch("http://127.0.0.1:5000/pedidos")
       .then((reponse) => reponse.json())
       .then((pedidos) => setData(pedidos));
-  });
+  }, []);
 
   return (
     <div className="flex flex-col gap-2">
-      {data?.data.map((item) => (
-        <div className="flex flex-row bg-base-200 rounded-md p-3 border-base-200 border justify-between">
-          <div>
-            <p>{item.cantidad}</p>
-            <h3 className="font-semibold text-xl">{item.fecha}</h3>
-            <p>{item.fecha_pedido}</p>
-            <p>{item.id_pedido}</p>
-          </div>
-          <div></div>
-        </div>
-      ))}
+      <BreadCumbs Rutas={Rutas}/>
+      <div className="overflow-x-auto">
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Estado</th>
+              <th>Job</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+
+            </tr>
+          </thead>
+          <tbody>
+          {data?.data.map((item,index) => (
+            <ItemTable item={item} index={index} />
+          ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
+
+const ItemTable = ({item,index} : {item: Data,index: number }) => {
+  return (
+    <tr>
+      <th>{index + 1}</th>
+      <td>{item.estado}</td>
+      <td>{item.precio_unitario}</td>
+      <td>{item.cantidad}</td>
+      <td>{item.total}</td>
+    </tr>
+  );
+};
+
+
+const Rutas = [
+  {
+    nombre: "Tabla",
+    to: "tablas",
+  },
+  {
+    nombre: "Pedidos",
+    to: "pedidos",
+  },
+];
