@@ -3,10 +3,10 @@ import Red5GLogo from "../assets/red5gLogoWhite.png"
 
 export default function Footer(){
 	return(
-		<footer className="footer sm:footer-horizontal text-white  bg-black items-center p-4">
+		<footer className="footer md:px-16 sm:footer-horizontal text-white  bg-black items-center p-4">
 		<aside className="grid-flow-col items-center">
 		  <img src={Red5GLogo} alt="" className="w-16" />
-		  <p> {new Date().getFullYear()} - Desarollada por ...</p>
+		  <p> {new Date().getFullYear()} -  Red 5G. Todos los derechos reservados - Cra. 53 # 80 - 198 | Atlántica Torre Empresarial | Piso 9 | Barranquilla, Colombia</p>
 		</aside>
 		<nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
 		  <a>

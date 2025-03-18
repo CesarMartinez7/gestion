@@ -18,7 +18,7 @@ export default function SiderBar() {
         </label>
 
         {/* Aquí se renderiza la página actual */}
-        <div className="p-4 h-full">
+        <div className="md:p-4 h-full">
           <Outlet />
         </div>
       </div>
@@ -31,23 +31,27 @@ export default function SiderBar() {
           className="drawer-overlay"
         ></label>
         <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-          <li>
-            <a className="flex justify-between">
-              Tablas <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
-            </a>
-          </li>
-          {routers.map((route) => (
-            <li key={route.route} className="text-xs ">
-              <Link
-                to={`/${route.route}`}
-                className="ml-1.5 w-full justify-start "
-              >
-                <Icon icon={`lucide:${route.icon}`} width="16" height="16" />
-                {route.name}
+          <ul className="menu bg-base-200 rounded-box w-56">
+            <li>
+              <a className="flex justify-between ">
+                Tablas <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
+              </a>
+              <ul>
+                {routers.map((route) => (
+                  <li key={route.route} className="text-xs ">
+                    <Link
+                      to={`/${route.route}`}
+                      className="ml-1.5 w-full justify-start "
+                    >
+                      <Icon icon={`lucide:${route.icon}`} width="16" height="16" />
+                      {route.name}
 
-              </Link>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </li>
-          ))}
+          </ul>
           <li>
             <a>
               {" "}

@@ -1,6 +1,6 @@
 
 import React, { useRef } from "react";
-import Red5GLogo from "../assets/red5gLogoBlack.png";
+import Red5GLogo from "../assets/red5gLogoWhite.png";
 
 export default function UserRegistrer() {
   const inputRefUserName = useRef<HTMLInputElement>(null);

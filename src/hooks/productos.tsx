@@ -13,9 +13,10 @@ type ReturnProductos = [
     React.RefObject<HTMLInputElement | null>,
     React.RefObject<HTMLInputElement | null>,
     React.RefObject<HTMLInputElement | null>,
+    React.RefObject<HTMLInputElement >,
     React.RefObject<HTMLInputElement | null>,
-    React.RefObject<HTMLInputElement | null>,
-];
+    React.RefObject<HTMLInputElement | null>
+];  
 
 
 export interface CreacionProducto {
@@ -24,7 +25,7 @@ export interface CreacionProducto {
     cantidad: number | bigint;
     precio: bigint | number;
     id_categoria: number;
-    imagenes: string | null | undefined;
+    imagenes: unknown;
 }
 
 export default function ProductosHooks(): ReturnProductos {
@@ -33,7 +34,7 @@ export default function ProductosHooks(): ReturnProductos {
     const inputRefDescripcion = useRef<HTMLInputElement | null>(null);
     const inputRefPrecio = useRef<HTMLInputElement | null>(null);
     const inputRefID_Categoria = useRef<HTMLInputElement | null>(null);
-    const inputRefImagenes = useRef<HTMLInputElement | null>(null);
+    const inputRefImagenes = useRef<HTMLInputElement >(null);
     const inputRefCantidad = useRef<HTMLInputElement | null>(null);
 
     const [dataProductos, setDataProductos] = useState<Response | undefined>();
@@ -47,15 +48,16 @@ export default function ProductosHooks(): ReturnProductos {
             descripcion: objectData.descripcion,
             cantidad: objectData.cantidad,
             precio: objectData.precio,
-            id_categoria: objectData.id_categoria, // ensure the id_categoria is included
+            id_categoria: objectData.id_categoria,
+            imagenes: objectData.imagenes
         };
 
         fetch("http://127.0.0.1:5000/ingresar_productos", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
-            body: JSON.stringify(formData),
+            body: formData
         })
             .then((response) => {
                 if (!response.ok) {

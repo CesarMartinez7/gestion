@@ -4,7 +4,7 @@ from models.productos import Productos
 def validaciones_ingresar_productos(valores_productos):
 
     if not valores_productos["nombre"] or not valores_productos["precio"] or not valores_productos["cantidad"] or not valores_productos["id_categoria"]:
-        return "El nombre,  el precio, el stock y la categoría son obligatorios."
+        return "El nombre,  el precio, la cantidad y la categoría son obligatorios."
     
     if not Validaciones.limite_caracteres(valores_productos["nombre"], 30):
         return "El nombre del producto debe contener solo letras y no caracteres especiales y un limite de 30 caracteres."

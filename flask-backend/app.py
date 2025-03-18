@@ -47,7 +47,7 @@ def upload_file():
 
     return jsonify({"url": image_url}), 201
 
-# Inicializar la base de datos
+# Inicializar la base de datos2
 db.init_app(app)
 
 # Registrar las rutas

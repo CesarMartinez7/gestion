@@ -1,18 +1,31 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Data } from "../types/productos";
 import BreadCumbs from "../ui/breadcumbs";
 import { Icon } from "@iconify/react";
 import Loading from "../ui/loading";
 import ProductosHooks from "../hooks/productos";
 import { motion } from "framer-motion";
+import { Response } from "../types/response";
+
 
 interface UpdateProductos {
   id_producto: number;
-  descripcion: string;
-  nombre: string;
+  descripcion: string | undefined;
+  nombre: string | undefined;
   precio: number | bigint;
   cantidad: number | bigint;
 }
+
+
+
+
+const traerCategorias = async () => {
+  const response = await fetch("http://127.0.0.1:5000/categorias")
+  const data = await response.json()
+  console.log(data)
+}
+
+
 
 export default function Productos({ name }: { name: string }) {
   const [
@@ -29,7 +42,26 @@ export default function Productos({ name }: { name: string }) {
     inputRefImagenes,
     inputRefPrecio,
     inputRefCantidad,
+
   ] = ProductosHooks();
+
+
+
+  const [selectOption, setSelectOption] = useState<string | number>("")
+
+  const [dataCategorias, setDataCategorias] = useState<Response>()
+
+  const traerCategorias = async () => {
+    const response = await fetch("http://127.0.0.1:5000/categorias")
+    const data = await response.json()
+    if (data) {
+      console.log(data)
+      setDataCategorias(data)
+    }
+  }
+
+
+
 
   const handleClickUpdate = (object: UpdateProductos) => {
     fetch("http://127.0.0.1:5000/actualizar_productos", {
@@ -46,6 +78,12 @@ export default function Productos({ name }: { name: string }) {
       .then((response) => response.json())
       .then((pedidos) => setDataProductos(pedidos));
   }, []);
+
+  // Traer los datos para ver las categorias disponibles ....... cdfdfdffdf
+  useEffect(() => {
+    traerCategorias()
+  }, [isOpen])
+
 
   if (!dataProductos) {
     return <Loading />;
@@ -68,49 +106,74 @@ export default function Productos({ name }: { name: string }) {
           >
             <div className="justify-end flex">
               <button
-                className="btn btn-circle btn-sm"
+                className="btn btn-circle btn-sm btn-ghost"
                 onClick={() => setIsOpen(false)}
               >
                 ✕
               </button>
             </div>
-            <h1 className="font-bold text-xl">Crear Productos</h1>
+            <h1 className="font-bold text-xl">Crear {name}</h1>
             <form
               className="w-full"
               onSubmit={(e: React.FormEvent) => {
-                e.preventDefault();
-
+                e.preventDefault()
+                const datosFomularios = new FormData()
+                console.log(datosFomularios)
                 if (
                   inputRefCantidad.current?.value &&
                   inputRefDescripcion.current?.value &&
-                  inputRefID_Categoria.current?.value &&
                   inputRefPrecio.current?.value &&
                   inputRefNombre.current?.value &&
-                  inputRefImagenes.current?.value
+                  inputRefImagenes.current?.files
+
                 ) {
-                  handleSubmitCreate({
-                    nombre: inputRefNombre.current.value,
-                    descripcion: inputRefDescripcion.current.value,
-                    cantidad: inputRefCantidad.current.value,
-                    precio: inputRefPrecio.current.value,
-                    id_categoria: inputRefID_Categoria.current.value,
-                  });
+                  datosFomularios.append("nombre", inputRefNombre.current.value)
+                  datosFomularios.append("cantidad", inputRefCantidad.current.value)
+                  datosFomularios.append("descripcion", inputRefDescripcion.current.value)
+                  datosFomularios.append("precio", inputRefPrecio.current.value)
+                  datosFomularios.append("id_categoria", selectOption)
+                  const imagen = inputRefImagenes.current.files[0]
+                  console.log(imagen)
+
+                  if (imagen) {
+                    datosFomularios.append("imagenes", imagen)
+                  }
+                  console.log("Campos rellenados correctamente")
                 }
+
+                // Codigo aqui de las partes del FETCH 
+
+                fetch("http://127.0.0.1:5000/ingresar_productos", {
+                  method: "POST",
+                  body: datosFomularios, // Pasar FormData en el cuerpo de la solicitud
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log("Producto creado:", data);
+                  })
+                  .catch((error) => {
+                    console.error("Error al crear producto:", error);
+                  });
+
+                console.log(datosFomularios)
+
               }}
             >
               <div className="flex gap-2 flex-col">
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Nombre</legend>
+                  <legend className="fieldset-legend" >Nombre</legend>
                   <input
                     type="text"
                     className="input w-full"
                     placeholder="Nombre"
+                    defaultValue={"Prueba react"}
                     ref={inputRefNombre}
                   />
                 </fieldset>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Descripcion</legend>
                   <input
+                    defaultValue={"Prueba REACT"}
                     type="text"
                     className="input w-full"
                     placeholder="Descripcion"
@@ -120,39 +183,48 @@ export default function Productos({ name }: { name: string }) {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Cantidad</legend>
                   <input
+                    defaultValue={"Prueba REACT"}
                     type="number"
                     className="input w-full"
                     placeholder="Cantidad"
                     ref={inputRefCantidad}
                   />
                 </fieldset>
+                <label for="categorias" className="fieldset fieldset-legend">Categorias disponibles ⬇️ </label>
+                <select name="categorias" id="categorias" value={selectOption} className="btn w-full" >
+
+                  {dataCategorias?.data.map((miniCategoria) => (
+                    <option value={`${miniCategoria.id_categoria}`} className="btn" onClick={() => {
+                      setSelectOption(miniCategoria.id_categoria)
+                    }}>{miniCategoria.nombre}</option>
+
+                  ))}
+                </select>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Precio</legend>
                   <input
+                    defaultValue={"Prueba REACT"}
                     type="number"
                     className="input w-full"
                     placeholder="Precio"
                     ref={inputRefPrecio}
                   />
                 </fieldset>
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Imagen</legend>
-                  <input
-                    type="file"
-                    className="file w-full"
-                    placeholder="Type here"
-                    ref={inputRefImagenes}
-                  />
-                </fieldset>
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Id Categoria</legend>
-                  <input
-                    type="number"
-                    className="input w-full"
-                    placeholder="ID Categoria"
-                    ref={inputRefID_Categoria}
-                  />
-                </fieldset>
+
+
+                <div className="flex items-center justify-center w-full">
+                  <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <svg className="w-8 h-8 mb-4 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                      </svg>
+                      <p className="mb-2 text-sm "><span className="font-semibold">Click para Cargar Imagen</span> or drag and drop</p>
+                      <p className="text-xs ">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    </div>
+                    <input id="dropzone-file" type="file" className="hidden" ref={inputRefImagenes} />
+                  </label>
+                </div>
+
                 <input
                   type="submit"
                   className="w-full btn btn-neutral"
@@ -164,7 +236,7 @@ export default function Productos({ name }: { name: string }) {
         </motion.div>
       )}
 
-      <main className="gap-2 px-8">
+      <main className="gap-2 md:px-8">
         <BreadCumbs Rutas={Rutas} />
         <h3 className="font-bold text-xl">{name}</h3>
         <div className="flex justify-end w-full gap-2">
@@ -221,7 +293,17 @@ const Table = ({
   Item: Data;
   index: number;
   handleUpdateProducto: (object: UpdateProductos) => void;
+
 }) => {
+
+
+  const inputRefNombreUpdate = useRef<HTMLInputElement>(null)
+  const inputRefCantidadUpdate = useRef<HTMLInputElement>(null)
+  const inputRefPrecioUpdate = useRef<HTMLInputElement>(null)
+  const inputRefImagenesUpdate = useRef<HTMLInputElement>(null)
+  const inputRefDescripcionUpdate = useRef<HTMLInputElement>(null)
+
+
   return (
     <tr>
       <th>{index + 1}</th>
@@ -251,13 +333,18 @@ const Table = ({
             <form
               onSubmit={(e: React.FormEvent) => {
                 e.preventDefault();
-                handleUpdateProducto({
-                  id_producto: Item.id_producto,
-                  nombre: Item.nombre,
-                  descripcion: Item.descripcion,
-                  precio: Item.precio,
-                  cantidad: Item.cantidad,
-                });
+                if (inputRefCantidadUpdate && inputRefDescripcionUpdate && inputRefImagenesUpdate && inputRefNombreUpdate && inputRefPrecioUpdate) {
+
+                  console.log(inputRefDescripcionUpdate.current?.value, inputRefCantidadUpdate, inputRefNombreUpdate, inputRefPrecioUpdate)
+
+                  handleUpdateProducto({
+                    id_producto: Item.id_producto,
+                    nombre: inputRefNombreUpdate.current?.value,
+                    descripcion: inputRefDescripcionUpdate.current?.value,
+                    precio: Number(inputRefPrecioUpdate.current?.value),
+                    cantidad: Number(inputRefCantidadUpdate.current?.value),
+                  });
+                }
               }}
             >
               <div className="flex flex-col gap-2">
@@ -281,13 +368,34 @@ const Table = ({
                   className="input w-full"
                   placeholder="Precio"
                 />
-                <input type="file" className="w-full" placeholder="Archivo" />
+                <div className="flex items-center justify-center w-full">
+                  <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <svg className="w-8 h-8 mb-4 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                      </svg>
+                      <p className="mb-2 text-sm "><span className="font-semibold">Click para Cargar Imagen</span> or drag and drop</p>
+                      <p className="text-xs ">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    </div>
+                    <input id="dropzone-file" type="file" className="hidden" />
+                  </label>
+                </div>
+
                 <input type="submit" className="btn w-full btn-neutral" />
               </div>
             </form>
           </div>
         </dialog>
-        <button className="btn btn-soft btn-error btn-sm">Eliminar</button>
+        <button className="btn btn-soft btn-error btn-sm" onClick={
+          () => {
+            fetch("http://127.0.0.1:5000/cambiar_estado_productos", {
+              method: "PUT",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({id_producto: Item.id_producto , estado: 2})
+            })
+          }}  >Eliminar</button>
       </td>
     </tr>
   );

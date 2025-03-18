@@ -23,6 +23,7 @@ class ProductosQuery:
             imagenes=valores_productos["imagenes"]
             
         )
+        print(producto)
         save_changes(producto)
         registro = HistorialCambiosProducto(id_producto=producto.id_producto,nombre=valores_productos["nombre"], descripcion=valores_productos["descripcion"], cantidad=valores_productos["cantidad"], precio=valores_productos["precio"], estado=activo, imagenes=valores_productos["imagenes"])
         save_changes(registro)

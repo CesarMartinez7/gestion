@@ -1,15 +1,21 @@
-import {create}  from 'zustand';
+import { create } from 'zustand';
 
-// Definimos el tipo de estado de nuestro store
+
 interface ThemeStore {
-  theme: 'light' | 'dark'; // Definimos los posibles valores del tema
-  toggleTheme: () => void; // Función para cambiar el tema
+  theme: 'light' | 'dark'; 
+  toggleTheme: () => void; 
 }
 
-// Creamos el store utilizando Zustand
+
 const useThemeStore = create<ThemeStore>((set) => ({
-  theme: 'light', // El valor inicial del tema
-  toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
+  theme: (localStorage.getItem('theme') as 'light' | 'dark') || 'light', 
+  toggleTheme: () => {
+    set((state) => {
+      const newTheme = state.theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+      return { theme: newTheme };
+    });
+  },
 }));
 
 export default useThemeStore;
