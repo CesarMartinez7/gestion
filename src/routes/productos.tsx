@@ -98,6 +98,9 @@ export default function Productos({ name }: { name: string }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
+           <div className=" fixed w-full h-full grid place-items-center ">
+          <div>dsfsf</div>
+        </div>
           <motion.div
             className="bg-base-100 w-lg h-fit p-6 rounded-xl"
             whileInView={{ scale: 1 }}
@@ -296,7 +299,7 @@ const Table = ({
 
 }) => {
 
-
+  const [isOpenDeletePopover,setIsOpenDeletePopover] = useState<boolean>(false)
   const inputRefNombreUpdate = useRef<HTMLInputElement>(null)
   const inputRefCantidadUpdate = useRef<HTMLInputElement>(null)
   const inputRefPrecioUpdate = useRef<HTMLInputElement>(null)
@@ -386,6 +389,11 @@ const Table = ({
             </form>
           </div>
         </dialog>
+
+
+        
+       
+
         <button className="btn btn-soft btn-error btn-sm" onClick={
           () => {
             fetch("http://127.0.0.1:5000/cambiar_estado_productos", {
@@ -396,6 +404,8 @@ const Table = ({
               body: JSON.stringify({id_producto: Item.id_producto , estado: 2})
             })
           }}  >Eliminar</button>
+
+          
       </td>
     </tr>
   );

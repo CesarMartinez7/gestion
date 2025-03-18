@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-
+// Definimos el tipo de estado de nuestro store
 interface ThemeStore {
   theme: 'light' | 'dark'; 
   toggleTheme: () => void; 
