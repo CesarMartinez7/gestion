@@ -1,4 +1,4 @@
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import { Pedidos } from "../types/pedidos";
 import { Data } from "../types/pedidos";
 import BreadCumbs from "../ui/breadcumbs";
@@ -94,7 +94,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number,  isBig: 
       <td>{item.id_producto}</td>
       <td className="flex gap-2 w-full justify-end">
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`}>Actualizar</button>
-        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}   btn-error`}>Eliminar</button>
+        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`}>Eliminar</button>
       </td>
     </tr>
   );

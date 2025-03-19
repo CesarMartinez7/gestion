@@ -1,24 +1,37 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, SetStateAction } from "react";
 import Loading from "../ui/loading";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {
-  handleUpdateCategoria,
-  handleClickDelete,
-  handleClickCreate,
-} from "../utils/method-categorias";
 import CategoriaHooks from "../hooks/categoria";
 import { Response } from "../types/response";
 import BreadCumbs from "../ui/breadcumbs";
+import NotData from "../ui/notdata";
+
+
+
+
+
+
+
+
 
 const Table = ({
   Data,
   handleModalOpen,
-  isBig
+  isBig,
+  isChangeSubmit,
+  setIsChangeSubmit
+  
 }: {
   Data: Response;
   handleModalOpen: Function;
-  isBig: boolean
+  isBig: boolean;
+  isChangeSubmit: boolean;
+  setIsChangeSubmit: React.Dispatch<SetStateAction<boolean>>
 }) => {
+
+  if(Data.data.length === 0){
+    return <NotData/>
+  }
   return (
     <div className="overflow-x-auto">
       <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
@@ -83,7 +96,25 @@ const Table = ({
                         <button
                           className="btn "
                           onClick={() => {
-                            handleClickDelete({id_categoria: item.id_categoria, estado: 2});
+                            
+                            fetch("http://127.0.0.1:5000/cambiar_estado_categorias", {
+                              method: "PUT",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                estado: 2,
+                                id_categoria: item.id_categoria,
+                              }),
+                            })
+                              .then((response) => {
+                                if(response.ok){
+                                  setIsChangeSubmit(!isChangeSubmit)
+                                }
+                              })
+                              .then((json) => console.log(json))
+                              .catch((err) => console.error(err));
+
                           }}
                         >
                           Eliminar ⚠️
@@ -121,8 +152,8 @@ export default function Categorias() {
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
     useState<boolean>(false);
 
-  const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement>(null);
-  const inputCreateCategoriaElementNombre = useRef<HTMLInputElement>(null);
+  const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement | null>(null);
+  const inputCreateCategoriaElementNombre = useRef<HTMLInputElement | null>(null);
 
   // Petición para cargar las categorías
   useEffect(() => {
@@ -161,7 +192,7 @@ export default function Categorias() {
 
               {/* Título */}
               <h1 className="text-2xl text-center font-bold mb-6">
-                Crear Categoríaa
+                Crear Categoría
               </h1>
 
               {/* Formulario */}
@@ -268,10 +299,6 @@ export default function Categorias() {
                       })
                       .then((json) => console.log(json))
                       .catch((err) => console.log(err));
-                    
-
-
-
                   }
                   handleModalClose();
                 }}
@@ -303,7 +330,7 @@ export default function Categorias() {
             </div>
           </dialog>
         )}
-        <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} />
+        <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} isChangeSubmit={isChangeSubmit} setIsChangeSubmit={setIsChangeSubmit} />
       </main>
     );
   }

@@ -6,7 +6,7 @@ import Loading from "../ui/loading";
 import ProductosHooks from "../hooks/productos";
 import { motion } from "framer-motion";
 import { Response } from "../types/response";
-
+import NotData from "../ui/notdata";
 
 
 interface UpdateProductos {
@@ -20,9 +20,9 @@ interface UpdateProductos {
 
 
 export default function Productos({ name }: { name: string }) {
-  const {inputRefCantidad,inputRefDescripcion,inputRefImagenes,inputRefNombre,isBig,isOpen,setIsOpen,setDataProductos,setIsBig,dataProductos,inputRefPrecio} = ProductosHooks();
+  const { inputRefCantidad, inputRefDescripcion, inputRefImagenes, inputRefNombre, isBig, isOpen, setIsOpen, setDataProductos, setIsBig, dataProductos, inputRefPrecio } = ProductosHooks();
 
-  const [isSubmit,setIsSubmit] = useState<boolean>(false)
+  const [isSubmit, setIsSubmit] = useState<boolean>(false)
 
 
   const [selectOption, setSelectOption] = useState<string>("63")
@@ -42,13 +42,13 @@ export default function Productos({ name }: { name: string }) {
 
   const handleClickUpdate = (object: UpdateProductos) => {
     const updatedObject = { ...object };
-  
+
     // Si algún campo es undefined o null, lo puedes limpiar
     if (updatedObject.descripcion === undefined) updatedObject.descripcion = "";
     if (updatedObject.nombre === undefined) updatedObject.nombre = "";
     if (updatedObject.precio === undefined) updatedObject.precio = 0;
     if (updatedObject.cantidad === undefined) updatedObject.cantidad = 0;
-  
+
     fetch("http://127.0.0.1:5000/actualizar_productos", {
       method: "PUT",
       headers: {
@@ -56,10 +56,10 @@ export default function Productos({ name }: { name: string }) {
       },
       body: JSON.stringify(updatedObject),
     }).then((response) => console.dir(response));
-    
+
     setIsSubmit(!isSubmit);
   };
-  
+
 
   // Fetch de la interfaz productos fetch total
 
@@ -67,13 +67,14 @@ export default function Productos({ name }: { name: string }) {
     fetch("http://127.0.0.1:5000/productos")
       .then((response) => response.json())
       .then((pedidos) => setDataProductos(pedidos));
-  },[isSubmit]);
+  }, [isSubmit]);
 
-  // Traer Categorias cuando se abra el isOpen o la modal de creacion
+  // Traer Categorias cuando se abra el isOpen o la modal DSF
 
   useEffect(() => {
     traerCategorias()
-  }, [isOpen,isSubmit])
+  }, [isOpen, isSubmit])
+
 
 
   if (!dataProductos) {
@@ -81,7 +82,7 @@ export default function Productos({ name }: { name: string }) {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-full">
       {isOpen && (
         <motion.div
           className="fixed inset-0 flex items-center justify-center bg-black/60 z-[999]"
@@ -89,9 +90,9 @@ export default function Productos({ name }: { name: string }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-           <div className="">
-          <div>dsfsf</div>
-        </div>
+          <div className="">
+            <div>dsfsf</div>
+          </div>
           <motion.div
             className="bg-base-100 w-lg h-fit p-6 rounded-xl"
             whileInView={{ scale: 1 }}
@@ -161,14 +162,14 @@ export default function Productos({ name }: { name: string }) {
                     type="text"
                     className="input-sm input w-full"
                     placeholder="Nombre"
-                    
+
                     ref={inputRefNombre}
                   />
                 </fieldset>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Descripcion</legend>
                   <input
-                    
+
                     type="text"
                     className="input-sm input w-full"
                     placeholder="Descripcion"
@@ -178,7 +179,7 @@ export default function Productos({ name }: { name: string }) {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Cantidad</legend>
                   <input
-                   
+
                     type="number"
                     className="input-sm input w-full"
                     placeholder="Cantidad"
@@ -189,7 +190,7 @@ export default function Productos({ name }: { name: string }) {
                 <select name="categorias" id="categorias" value={selectOption} className="btn w-full" >
 
                   {dataCategorias?.data.map((miniCategoria) => (
-                    <option value={`${miniCategoria.id_categoria}`}  key={miniCategoria.id_categoria}  className="btn" onClick={() => {
+                    <option value={`${miniCategoria.id_categoria}`} key={miniCategoria.id_categoria} className="btn" onClick={() => {
                       setSelectOption(miniCategoria.id_categoria)
                     }}>{miniCategoria.nombre}</option>
 
@@ -231,7 +232,7 @@ export default function Productos({ name }: { name: string }) {
         </motion.div>
       )}
 
-      <main className="gap-2 md:px-8">
+      <main className="gap-2 md:px-8  relative">
         <BreadCumbs Rutas={Rutas} />
         <h3 className="font-bold text-2xl"> {name}</h3>
         <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${dataProductos.data.length}`}</span>   </p>
@@ -249,35 +250,35 @@ export default function Productos({ name }: { name: string }) {
             {isBig ? "Maximizar" : "Minimizar"}
           </button>
         </div>
-        <div className="overflow-x-auto">
-          <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Cantidad</th>
-                <th className="flex items-center">
-                  <Icon icon="lucide:dollar-sign" width="14" height="14" />
-                  Precio
-                </th>
-                <th>Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataProductos?.data.map((item, index) => (
-                <Table 
-                  isSubmit={isSubmit}
-                  setIsSubmit={setIsSubmit}
-                  key={index}
-                  index={index}
-                  Item={item}
-                  handleUpdateProducto={handleClickUpdate}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+
+        {dataProductos.data.length === 0 ? (<NotData />) : (<div className="overflow-x-auto">
+           <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
+            
+          <thead>
+          <tr>
+            <th></th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th className="flex items-center">
+              <Icon icon="lucide:dollar-sign" width="14" height="14" />
+              Precio
+            </th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody className="">
+          {dataProductos.data.map((item, index) => (
+            <Table
+              isSubmit={isSubmit}
+              setIsSubmit={setIsSubmit}
+              key={index}
+              index={index}
+              Item={item}
+              handleUpdateProducto={handleClickUpdate}
+            />
+          ))}
+        </tbody></table> </div>)}
       </main>
     </div>
   );
@@ -293,7 +294,7 @@ const Table = ({
   Item: Data;
   index: number;
   handleUpdateProducto: (object: UpdateProductos) => void;
-  setIsSubmit: React.Dispatch<SetStateAction<boolean>> ;
+  setIsSubmit: React.Dispatch<SetStateAction<boolean>>;
   isSubmit: boolean
 
 }) => {
@@ -335,7 +336,7 @@ const Table = ({
             <form
               onSubmit={(e: React.FormEvent) => {
                 e.preventDefault();
-                if (inputRefCantidadUpdate.current?.value && inputRefDescripcionUpdate.current?.value  && inputRefNombreUpdate.current?.value && inputRefPrecioUpdate.current?.value) {
+                if (inputRefCantidadUpdate.current?.value && inputRefDescripcionUpdate.current?.value && inputRefNombreUpdate.current?.value && inputRefPrecioUpdate.current?.value) {
                   handleUpdateProducto({
                     id_producto: Item.id_producto,
                     nombre: inputRefNombreUpdate.current?.value,
@@ -380,27 +381,23 @@ const Table = ({
             </form>
           </div>
         </dialog>
-{/* 
-       <div className={`${isOpenDeletePopover ? "flex" : "hidden"}`}>
-
-       </div> */}
-
+        
         <button className="btn btn-soft btn-error btn-sm" onClick={
           () => {
             fetch("http://127.0.0.1:5000/cambiar_estado_productos", {
               method: "PUT",
               headers: {
-                  "Content-Type": "application/json",
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify({id_producto: Item.id_producto , estado: 2})
+              body: JSON.stringify({ id_producto: Item.id_producto, estado: 2 })
             }).then((response) => {
-              if(response.ok){
+              if (response.ok) {
                 setIsSubmit(!isSubmit)
-              } 
-            }).then((code) => console.log(`Este es la respuesta llamada code${code}`) )
-            
+              }
+            }).then((code) => console.log(`Este es la respuesta llamada code${code}`))
+
           }}>Eliminar</button>
-          
+
       </td>
     </tr>
   );
