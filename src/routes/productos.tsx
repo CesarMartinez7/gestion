@@ -18,36 +18,12 @@ interface UpdateProductos {
 
 
 
-
-const traerCategorias = async () => {
-  const response = await fetch("http://127.0.0.1:5000/categorias")
-  const data = await response.json()
-  console.log(data)
-}
-
-
-
 export default function Productos({ name }: { name: string }) {
-  const [
-    isBig,
-    setIsBig,
-    dataProductos,
-    setDataProductos,
-    isOpen,
-    setIsOpen,
-    handleSubmitCreate,
-    inputRefNombre,
-    inputRefDescripcion,
-    inputRefID_Categoria,
-    inputRefImagenes,
-    inputRefPrecio,
-    inputRefCantidad,
-
-  ] = ProductosHooks();
+  const {inputRefCantidad,inputRefDescripcion,inputRefImagenes,inputRefNombre,isBig,isOpen,setIsOpen,setDataProductos,setIsBig,dataProductos,inputRefPrecio} = ProductosHooks();
 
 
 
-  const [selectOption, setSelectOption] = useState<string | number>("")
+  const [selectOption, setSelectOption] = useState<string>("")
 
   const [dataCategorias, setDataCategorias] = useState<Response>()
 
@@ -98,7 +74,7 @@ export default function Productos({ name }: { name: string }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-           <div className=" fixed w-full h-full grid place-items-center ">
+           <div className=" ">
           <div>dsfsf</div>
         </div>
           <motion.div
@@ -167,7 +143,7 @@ export default function Productos({ name }: { name: string }) {
                   <legend className="fieldset-legend" >Nombre</legend>
                   <input
                     type="text"
-                    className="input w-full"
+                    className="input-sm input w-full"
                     placeholder="Nombre"
                     defaultValue={"Prueba react"}
                     ref={inputRefNombre}
@@ -178,7 +154,7 @@ export default function Productos({ name }: { name: string }) {
                   <input
                     defaultValue={"Prueba REACT"}
                     type="text"
-                    className="input w-full"
+                    className="input-sm input w-full"
                     placeholder="Descripcion"
                     ref={inputRefDescripcion}
                   />
@@ -188,12 +164,12 @@ export default function Productos({ name }: { name: string }) {
                   <input
                     defaultValue={"Prueba REACT"}
                     type="number"
-                    className="input w-full"
+                    className="input-sm input w-full"
                     placeholder="Cantidad"
                     ref={inputRefCantidad}
                   />
                 </fieldset>
-                <label for="categorias" className="fieldset fieldset-legend">Categorias disponibles ⬇️ </label>
+                <label htmlFor="categorias" className="fieldset fieldset-legend">Categorias disponibles ⬇️ </label>
                 <select name="categorias" id="categorias" value={selectOption} className="btn w-full" >
 
                   {dataCategorias?.data.map((miniCategoria) => (
@@ -208,7 +184,7 @@ export default function Productos({ name }: { name: string }) {
                   <input
                     defaultValue={"Prueba REACT"}
                     type="number"
-                    className="input w-full"
+                    className="input-sm input w-full"
                     placeholder="Precio"
                     ref={inputRefPrecio}
                   />
@@ -216,8 +192,8 @@ export default function Productos({ name }: { name: string }) {
 
 
                 <div className="flex items-center justify-center w-full">
-                  <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-base-300  border-dashed rounded-lg cursor-pointer  ">
+                    <div className="">
                       <svg className="w-8 h-8 mb-4 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                       </svg>
@@ -299,7 +275,7 @@ const Table = ({
 
 }) => {
 
-  const [isOpenDeletePopover,setIsOpenDeletePopover] = useState<boolean>(false)
+  const [isOpenDeletePopover] = useState<boolean>(false)
   const inputRefNombreUpdate = useRef<HTMLInputElement>(null)
   const inputRefCantidadUpdate = useRef<HTMLInputElement>(null)
   const inputRefPrecioUpdate = useRef<HTMLInputElement>(null)
@@ -372,7 +348,7 @@ const Table = ({
                   placeholder="Precio"
                 />
                 <div className="flex items-center justify-center w-full">
-                  <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
+                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2  border-dashed rounded-lg cursor-pointer bg-gray-50 ">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg className="w-8 h-8 mb-4 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
@@ -392,7 +368,9 @@ const Table = ({
 
 
         
-       
+       <div className={`${isOpenDeletePopover ? "flex" : "hidden"}`}>
+
+       </div>
 
         <button className="btn btn-soft btn-error btn-sm" onClick={
           () => {
@@ -403,8 +381,10 @@ const Table = ({
               },
               body: JSON.stringify({id_producto: Item.id_producto , estado: 2})
             })
-          }}  >Eliminar</button>
+            
+          }}>Eliminar</button>
 
+          
           
       </td>
     </tr>

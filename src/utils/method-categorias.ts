@@ -29,7 +29,7 @@ export const handleClickDelete = ({
     id_categoria,
     estado,
   }: {
-    id_categoria: number;
+    id_categoria: string;
     estado: number;
   }) => {
     fetch("http://127.0.0.1:5000/cambiar_estado_categorias", {

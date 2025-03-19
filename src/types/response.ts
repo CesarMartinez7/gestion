@@ -5,7 +5,7 @@
 
 export interface Data {
 	descripcion: string
-	id_categoria: number
+	id_categoria: string
 	nombre: string
 }
 

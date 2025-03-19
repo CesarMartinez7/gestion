@@ -1,34 +1,37 @@
-import { useRef, useState } from "react";
+import React, { RefObject, useRef, useState } from "react";
 import { Response } from "../types/productos";
 
-type ReturnProductos = [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>,
-    Response | undefined,
-    React.Dispatch<React.SetStateAction<Response | undefined>>,
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>,
-    (objectData: CreacionProducto) => void,  // Cambiar aquí
-    React.RefObject<HTMLInputElement | null>,
-    React.RefObject<HTMLInputElement | null>,
-    React.RefObject<HTMLInputElement | null>,
-    React.RefObject<HTMLInputElement | null>,
-    React.RefObject<HTMLInputElement >,
-    React.RefObject<HTMLInputElement | null>,
-    React.RefObject<HTMLInputElement | null>
-];  
+
+
+
+interface RetornoProductos2  {
+    isBig: boolean
+    dataProductos: Response | undefined
+    inputRefNombre: RefObject<HTMLInputElement | null>
+    setDataProductos: React.Dispatch<React.SetStateAction<Response | undefined>>
+    inputRefDescripcion : RefObject<HTMLInputElement | null>
+    inputRefPrecio : RefObject<HTMLInputElement | null>
+    inputRefID_Categoria : RefObject<HTMLInputElement | null>
+    inputRefImagenes : RefObject<HTMLInputElement | null>
+    inputRefCantidad: RefObject<HTMLInputElement | null> 
+    isOpen: boolean
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setIsBig: React.Dispatch<React.SetStateAction<boolean>>
+
+
+}
 
 
 export interface CreacionProducto {
     nombre: string;
     descripcion: string;
-    cantidad: number | bigint;
-    precio: bigint | number;
-    id_categoria: number;
-    imagenes: unknown;
+    cantidad: string;
+    precio: string;
+    id_categoria: string;
+    imagenes: Blob;
 }
 
-export default function ProductosHooks(): ReturnProductos {
+export default function ProductosHooks(): RetornoProductos2 {
     // Referencias InputElements para el formulario
     const inputRefNombre = useRef<HTMLInputElement | null>(null);
     const inputRefDescripcion = useRef<HTMLInputElement | null>(null);
@@ -41,53 +44,6 @@ export default function ProductosHooks(): ReturnProductos {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isBig, setIsBig] = useState<boolean>(false);
 
-    const handleSubmitCreate = (objectData: CreacionProducto) => {
-        // Prepare the data to send in the body
-        const formData = {
-            nombre: objectData.nombre,
-            descripcion: objectData.descripcion,
-            cantidad: objectData.cantidad,
-            precio: objectData.precio,
-            id_categoria: objectData.id_categoria,
-            imagenes: objectData.imagenes
-        };
-
-        fetch("http://127.0.0.1:5000/ingresar_productos", {
-            method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            body: formData
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Error al crear el producto.");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setDataProductos(data); // assuming the response returns product data
-                setIsOpen(false); // Close form or modal after successful submission
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                // Handle error (showing an alert, setting error state, etc.)
-            });
-    };
-
-    return [
-        isBig,
-        setIsBig,
-        dataProductos,
-        setDataProductos,
-        isOpen,
-        setIsOpen,
-        handleSubmitCreate,
-        inputRefDescripcion,
-        inputRefID_Categoria,
-        inputRefNombre,
-        inputRefImagenes,
-        inputRefPrecio,
-        inputRefCantidad,
-    ];
+    
+    return {isBig: isBig, dataProductos: dataProductos,setDataProductos: setDataProductos,inputRefDescripcion: inputRefDescripcion, setIsBig: setIsBig, isOpen: isOpen, setIsOpen: setIsOpen,inputRefCantidad: inputRefCantidad,inputRefImagenes: inputRefImagenes, inputRefPrecio: inputRefPrecio, inputRefID_Categoria: inputRefID_Categoria,inputRefNombre: inputRefNombre}
 }
