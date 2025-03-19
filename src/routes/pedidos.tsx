@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Pedidos } from "../types/pedidos";
 import { Data } from "../types/pedidos";
 import BreadCumbs from "../ui/breadcumbs";
@@ -12,7 +12,6 @@ enum Opciones {
   ENTREGADO = 5,
   CANCELADO = 6
 }
-
 
 const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
 
@@ -34,6 +33,7 @@ const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
 }
 
 export default function PedidosComp() {
+
   const [data, setData] = useState<Pedidos>();
   const [isBig, setIsBig] = useState<boolean>()
 
@@ -56,13 +56,33 @@ export default function PedidosComp() {
         <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${data?.data.length}`}</span> </p>
       </div>
       <div className="flex justify-end gap-2">
-        <button className="btn btn-neutral btn-sm" onClick={() => (
-          console.log("Hola en fetch creacion")
-        )} >Crear Pedidos</button>
-        <button className="btn btn-sm" onClick={() => setIsBig(!isBig)}>  { isBig ? `Minimizar` : "Maximizar"} </button>
+        {/* The button to open modal */}
+        <label htmlFor="my_modal_7" className="btn btn-sm btn-neutral">Crear pedidos </label>
+
+        {/* Put this part before </body> tag */}
+        <input type="checkbox" id="my_modal_7" className="modal-toggle" />
+        <div className="modal" role="dialog">
+          <div className="modal-box">
+            <form onSubmit={(e) => {
+              e.preventDefault()
+            }}>
+            <h3 className="text-xl font-bold">Crear Pedidos 🚀!</h3>
+            <p className="py-4">This modal works with a hidden checkbox!</p>
+            <div className="gap-2 flex-col flex">
+              <input type="text" className="input w-full" />
+              <input type="text" className="input w-full" />
+              <input type="text" className="input w-full" />
+              <input type="submit" className="btn w-full btn-neutral" value={"Crear Pedidos"} />
+
+            </div>
+            </form>
+          </div>
+          <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
+        </div>
+        <button className="btn btn-sm" onClick={() => setIsBig(!isBig)}>  {isBig ? `Minimizar` : "Maximizar"} </button>
       </div>
       <div className="overflow-x-auto">
-        <table className={`table ${isBig ? "table-sm" : "table-xs" } `}>
+        <table className={`table ${isBig ? "table-sm" : "table-xs"} `}>
           <thead>
             <tr>
               <th></th>
@@ -75,7 +95,7 @@ export default function PedidosComp() {
           </thead>
           <tbody>
             {data?.data.map((item, index) => (
-              <ItemTable item={item} index={index} key={item.id_pedido} isBig={isBig}  />
+              <ItemTable item={item} index={index} key={item.id_pedido} isBig={isBig} />
             ))}
           </tbody>
         </table>
@@ -84,7 +104,19 @@ export default function PedidosComp() {
   );
 }
 
-const ItemTable = ({ item, index, isBig }: { item: Data, index: number,  isBig: boolean | undefined }) => {
+const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: boolean | undefined }) => {
+  const [isOpenActualizar, setIsOpenActualizar] = useState(false)
+  const [isOpenEliminar, setIsOpenEliminar] = useState(false)
+
+  const handleClickEliminar = () => {
+
+  }
+
+  const handleClickActualizar = () => {
+    fetch("http://127.0.0.1:5000/pedidos").then((response) => console.log(response.json()))
+  }
+
+
   return (
     <tr>
       <th>{index + 1}</th>
@@ -92,9 +124,19 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number,  isBig: 
       <td>{item.cantidad}</td>
       <td>{item.fecha}</td>
       <td>{item.id_producto}</td>
+      <div className={`${isOpenEliminar ? "block" : "hidden"} w-full h-full fixed bg-black/50 `}>
+        <div>Elimimar open</div>
+      </div>
+      <div className={`${isOpenActualizar ? "block" : "hidden"} w-full h-full fixed bg-black/50`} >
+        <div>Actualizar open</div>
+      </div>
       <td className="flex gap-2 w-full justify-end">
-        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`}>Actualizar</button>
-        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`}>Eliminar</button>
+        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`} onClick={() => {
+          setIsOpenActualizar(true)
+        }} >Actualizar</button>
+        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`} onClick={() => {
+          setIsOpenEliminar(true)
+        }} >Eliminar</button>
       </td>
     </tr>
   );
