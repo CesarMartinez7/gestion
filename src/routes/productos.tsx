@@ -6,7 +6,7 @@ import Loading from "../ui/loading";
 import ProductosHooks from "../hooks/productos";
 import { motion } from "framer-motion";
 import { Response } from "../types/response";
-import { data } from "react-router-dom";
+
 
 
 interface UpdateProductos {
@@ -41,15 +41,25 @@ export default function Productos({ name }: { name: string }) {
   // Codigo para actualizar la parte de code
 
   const handleClickUpdate = (object: UpdateProductos) => {
+    const updatedObject = { ...object };
+  
+    // Si algún campo es undefined o null, lo puedes limpiar
+    if (updatedObject.descripcion === undefined) updatedObject.descripcion = "";
+    if (updatedObject.nombre === undefined) updatedObject.nombre = "";
+    if (updatedObject.precio === undefined) updatedObject.precio = 0;
+    if (updatedObject.cantidad === undefined) updatedObject.cantidad = 0;
+  
     fetch("http://127.0.0.1:5000/actualizar_productos", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(object),
-    });
-    setIsSubmit(!isSubmit)
+      body: JSON.stringify(updatedObject),
+    }).then((response) => console.dir(response));
+    
+    setIsSubmit(!isSubmit);
   };
+  
 
   // Fetch de la interfaz productos fetch total
 
@@ -179,7 +189,7 @@ export default function Productos({ name }: { name: string }) {
                 <select name="categorias" id="categorias" value={selectOption} className="btn w-full" >
 
                   {dataCategorias?.data.map((miniCategoria) => (
-                    <option value={`${miniCategoria.id_categoria}`} className="btn" onClick={() => {
+                    <option value={`${miniCategoria.id_categoria}`}  key={miniCategoria.id_categoria}  className="btn" onClick={() => {
                       setSelectOption(miniCategoria.id_categoria)
                     }}>{miniCategoria.nombre}</option>
 
@@ -321,14 +331,11 @@ const Table = ({
               </button>
             </form>
             <h3 className="font-bold text-lg uppercase">{Item.nombre}</h3>
-            <p className="py-4">{Item.descripcion}</p>
+            <p className="py-2">{Item.descripcion}</p>
             <form
               onSubmit={(e: React.FormEvent) => {
                 e.preventDefault();
-                if (inputRefCantidadUpdate && inputRefDescripcionUpdate && inputRefImagenesUpdate && inputRefNombreUpdate && inputRefPrecioUpdate) {
-
-                  console.log(inputRefDescripcionUpdate.current?.value, inputRefCantidadUpdate, inputRefNombreUpdate, inputRefPrecioUpdate)
-
+                if (inputRefCantidadUpdate.current?.value && inputRefDescripcionUpdate.current?.value  && inputRefNombreUpdate.current?.value && inputRefPrecioUpdate.current?.value) {
                   handleUpdateProducto({
                     id_producto: Item.id_producto,
                     nombre: inputRefNombreUpdate.current?.value,
@@ -341,49 +348,42 @@ const Table = ({
             >
               <div className="flex flex-col gap-2">
                 <input
+                  defaultValue={Item.nombre}
+                  ref={inputRefNombreUpdate}
                   type="text"
                   className="input w-full"
                   placeholder="Nombre"
                 />
                 <input
+                  defaultValue={Item.descripcion}
+                  ref={inputRefDescripcionUpdate}
                   type="text"
                   className="input w-full"
                   placeholder="Descripcion"
                 />
                 <input
+                  defaultValue={Item.cantidad}
+                  ref={inputRefCantidadUpdate}
                   type="number"
                   className="input w-full"
                   placeholder="Cantidad"
                 />
                 <input
+                  defaultValue={Item.precio}
+                  ref={inputRefPrecioUpdate}
                   type="number"
                   className="input w-full"
                   placeholder="Precio"
                 />
-                <div className="flex items-center justify-center w-full">
-                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2  border-dashed rounded-lg cursor-pointer border-base-300 ">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <svg className="w-8 h-8 mb-4 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                      </svg>
-                      <p className="mb-2 text-sm "><span className="font-semibold">Click para Cargar Imagen</span> or drag and drop</p>
-                      <p className="text-xs ">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                    </div>
-                    <input id="dropzone-file" type="file" className="hidden" />
-                  </label>
-                </div>
-
                 <input type="submit" className="btn w-full btn-neutral" />
               </div>
             </form>
           </div>
         </dialog>
-
-
-        
+{/* 
        <div className={`${isOpenDeletePopover ? "flex" : "hidden"}`}>
 
-       </div>
+       </div> */}
 
         <button className="btn btn-soft btn-error btn-sm" onClick={
           () => {

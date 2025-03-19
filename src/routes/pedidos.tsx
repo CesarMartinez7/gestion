@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { Pedidos } from "../types/pedidos";
 import { Data } from "../types/pedidos";
 import BreadCumbs from "../ui/breadcumbs";
-
-
 
 
 enum Opciones {
@@ -19,28 +17,25 @@ enum Opciones {
 const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
 
   if (opciones === Opciones.ACTIVO) {
-    return <h1>Activo</h1>
+    return <h3 className="font-bold">Activo</h3>
   } else if (opciones === Opciones.INACTIVO) {
-    return <h1>Inactivo</h1>
+    return <h3 className="text-zinc-600 font-bold">Inactivo</h3>
   } else if (opciones === Opciones.CANCELADO) {
-    return <h1>Cancelado</h1>
+    return <h3 className="text-red-500 font-bold">Cancelado</h3>
   } else if (opciones === Opciones.ENTREGADO) {
-    return <h1>Entregado</h1>
+    return <h3 className="text-green-500 font-bold">Entregado</h3>
   } else if (opciones === Opciones.PENDIENTE) {
-    return <h1>Pendiente</h1>
+    return <h3 className="text-yellow-500 font-bold">Pendiente</h3>
   } else if (opciones === Opciones.EN_PROCESO) {
-    return <h1>En proceso </h1>
+    return <h3 className="text-orange-500 font-bold">En proceso </h3>
   }
 
 
 }
 
-
-
-
-
 export default function PedidosComp() {
   const [data, setData] = useState<Pedidos>();
+  const [isBig, setIsBig] = useState<boolean>()
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/pedidos")
@@ -58,14 +53,16 @@ export default function PedidosComp() {
       </div>
       <div>
         <h3 className="font-bold text-2xl">Pedidos</h3>
+        <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${data?.data.length}`}</span> </p>
       </div>
       <div className="flex justify-end gap-2">
         <button className="btn btn-neutral btn-sm" onClick={() => (
           console.log("Hola en fetch creacion")
-        )} >Crear Pedidos</button><button className="btn btn-sm">Maximizar</button>
+        )} >Crear Pedidos</button>
+        <button className="btn btn-sm" onClick={() => setIsBig(!isBig)}>  { isBig ? `Minimizar` : "Maximizar"} </button>
       </div>
       <div className="overflow-x-auto">
-        <table className="table table-sm">
+        <table className={`table ${isBig ? "table-sm" : "table-xs" } `}>
           <thead>
             <tr>
               <th></th>
@@ -78,7 +75,7 @@ export default function PedidosComp() {
           </thead>
           <tbody>
             {data?.data.map((item, index) => (
-              <ItemTable item={item} index={index} />
+              <ItemTable item={item} index={index} key={item.id_pedido} isBig={isBig}  />
             ))}
           </tbody>
         </table>
@@ -87,7 +84,7 @@ export default function PedidosComp() {
   );
 }
 
-const ItemTable = ({ item, index }: { item: Data, index: number }) => {
+const ItemTable = ({ item, index, isBig }: { item: Data, index: number,  isBig: boolean | undefined }) => {
   return (
     <tr>
       <th>{index + 1}</th>
@@ -96,11 +93,9 @@ const ItemTable = ({ item, index }: { item: Data, index: number }) => {
       <td>{item.fecha}</td>
       <td>{item.id_producto}</td>
       <td className="flex gap-2 w-full justify-end">
-        <button className="btn btn-soft btn-sm btn-info">Actualizar</button><button className="btn btn-soft btn-sm btn-error">Eliminar</button>
+        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`}>Actualizar</button>
+        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}   btn-error`}>Eliminar</button>
       </td>
-
-
-
     </tr>
   );
 };

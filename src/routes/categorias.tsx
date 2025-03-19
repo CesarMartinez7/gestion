@@ -161,12 +161,11 @@ export default function Categorias() {
 
               {/* Título */}
               <h1 className="text-2xl text-center font-bold mb-6">
-                Crear Categoría
+                Crear Categoríaa
               </h1>
 
               {/* Formulario */}
-              <form
-                method="post"
+              <form  
                 className="flex flex-col gap-2"
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -174,14 +173,23 @@ export default function Categorias() {
                     inputCreateCategoriaElementDescripcion.current?.value &&
                     inputCreateCategoriaElementNombre.current?.value
                   ){
-                    handleClickCreate({
-                      descripcion:
-                        inputCreateCategoriaElementDescripcion.current.value,
-                      nombre: inputCreateCategoriaElementNombre.current.value,
-                    });
-                    setIsChangeSubmit(!isChangeSubmit);
                     
-                    // Cambiamos el estado para recargar los datos o re hacer el fetch que tiene la dependecia isChangeSubmit
+                    fetch("http://127.0.0.1:5000/ingresar_categorias", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        nombre: inputCreateCategoriaElementNombre.current.value,
+                        descripcion: inputCreateCategoriaElementDescripcion.current.value,
+                      }),
+                    })
+                      .then((response) => {
+                        if(response.ok){
+                          setIsChangeSubmit(!isChangeSubmit)
+                        }
+                      })
+                      .then((data) => console.log(data)).catch((response) => console.log("error", response))                   
                   }
                 }}
               >
@@ -241,14 +249,31 @@ export default function Categorias() {
                     inputRefDescripcion.current?.value &&
                     inputRefNombre.current?.value
                   ) {
-                    handleUpdateCategoria({
-                      descripcion: inputRefDescripcion.current.value,
-                      id_categoria: selectedCategory.id_categoria,
-                      nombre: inputRefNombre.current.value,
-                    });
+
+                    fetch("http://127.0.0.1:5000/actualizar_categorias", {
+                      method: "PUT",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        nombre: inputRefNombre.current.value,
+                        descripcion: inputRefDescripcion.current.value,
+                        id_categoria: selectedCategory.id_categoria
+                      }),
+                    })
+                      .then((response) => {
+                        if(response.ok) {
+                          setIsChangeSubmit(!isChangeSubmit)
+                        } 
+                      })
+                      .then((json) => console.log(json))
+                      .catch((err) => console.log(err));
+                    
+
+
+
                   }
                   handleModalClose();
-                  setIsChangeSubmit(!isChangeSubmit); // Cambiar el estado para actualizar los datos
                 }}
               >
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
