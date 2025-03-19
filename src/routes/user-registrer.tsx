@@ -17,9 +17,9 @@ export default function UserRegistrer() {
   };
 
   return (
-    <main className="grid place-content-center w-full h-full ">
+    <main className="grid place-content-center w-full h-full  ">
       <form onSubmit={handleClickLogin}>
-        <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+        <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box shadow-xl ">
           <div className="flex items-center w-full  justify-center">
           <img src={theme === "dark" ? Red5gLogoBlack : Red5GLogowhite} alt="Red5G Logo" className="w-[180px]" />
 
