@@ -146,7 +146,8 @@ export default function Categorias() {
     return (
       <main className="flex flex-col gap-2 px-8">
         <BreadCumbs Rutas={Rutas} />
-        <h1 className="text-xl font-bold">Categorías</h1>
+        <h1 className="text-2xl font-bold">Categorías</h1>
+        <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${data.data.length}`}</span> </p>
         {isOpenPopoverCreate && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[999]">
             <div className="w-full max-w-lg bg-base-100 shadow-2xl p-6 rounded-xl relative">
@@ -178,7 +179,9 @@ export default function Categorias() {
                         inputCreateCategoriaElementDescripcion.current.value,
                       nombre: inputCreateCategoriaElementNombre.current.value,
                     });
-                    setIsChangeSubmit(!isChangeSubmit); // Cambiamos el estado para recargar los datos
+                    setIsChangeSubmit(!isChangeSubmit);
+                    
+                    // Cambiamos el estado para recargar los datos o re hacer el fetch que tiene la dependecia isChangeSubmit
                   }
                 }}
               >

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 import { Data } from "../types/productos";
 import BreadCumbs from "../ui/breadcumbs";
 import { Icon } from "@iconify/react";
@@ -6,6 +6,7 @@ import Loading from "../ui/loading";
 import ProductosHooks from "../hooks/productos";
 import { motion } from "framer-motion";
 import { Response } from "../types/response";
+import { data } from "react-router-dom";
 
 
 interface UpdateProductos {
@@ -21,9 +22,10 @@ interface UpdateProductos {
 export default function Productos({ name }: { name: string }) {
   const {inputRefCantidad,inputRefDescripcion,inputRefImagenes,inputRefNombre,isBig,isOpen,setIsOpen,setDataProductos,setIsBig,dataProductos,inputRefPrecio} = ProductosHooks();
 
+  const [isSubmit,setIsSubmit] = useState<boolean>(false)
 
 
-  const [selectOption, setSelectOption] = useState<string>("")
+  const [selectOption, setSelectOption] = useState<string>("63")
 
   const [dataCategorias, setDataCategorias] = useState<Response>()
 
@@ -36,8 +38,7 @@ export default function Productos({ name }: { name: string }) {
     }
   }
 
-
-
+  // Codigo para actualizar la parte de code
 
   const handleClickUpdate = (object: UpdateProductos) => {
     fetch("http://127.0.0.1:5000/actualizar_productos", {
@@ -47,18 +48,22 @@ export default function Productos({ name }: { name: string }) {
       },
       body: JSON.stringify(object),
     });
+    setIsSubmit(!isSubmit)
   };
+
+  // Fetch de la interfaz productos fetch total
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/productos")
       .then((response) => response.json())
       .then((pedidos) => setDataProductos(pedidos));
-  }, []);
+  },[isSubmit]);
 
-  // Traer los datos para ver las categorias disponibles ....... cdfdfdffdf
+  // Traer Categorias cuando se abra el isOpen o la modal de creacion
+
   useEffect(() => {
     traerCategorias()
-  }, [isOpen])
+  }, [isOpen,isSubmit])
 
 
   if (!dataProductos) {
@@ -74,7 +79,7 @@ export default function Productos({ name }: { name: string }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-           <div className=" ">
+           <div className="">
           <div>dsfsf</div>
         </div>
           <motion.div
@@ -91,7 +96,7 @@ export default function Productos({ name }: { name: string }) {
                 ✕
               </button>
             </div>
-            <h1 className="font-bold text-xl">Crear {name}</h1>
+            <h1 className="font-bold text-2xl">Crear {name}</h1>
             <form
               className="w-full"
               onSubmit={(e: React.FormEvent) => {
@@ -129,6 +134,7 @@ export default function Productos({ name }: { name: string }) {
                   .then((response) => response.json())
                   .then((data) => {
                     console.log("Producto creado:", data);
+                    setIsSubmit(!isSubmit)
                   })
                   .catch((error) => {
                     console.error("Error al crear producto:", error);
@@ -145,14 +151,14 @@ export default function Productos({ name }: { name: string }) {
                     type="text"
                     className="input-sm input w-full"
                     placeholder="Nombre"
-                    defaultValue={"Prueba react"}
+                    
                     ref={inputRefNombre}
                   />
                 </fieldset>
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Descripcion</legend>
                   <input
-                    defaultValue={"Prueba REACT"}
+                    
                     type="text"
                     className="input-sm input w-full"
                     placeholder="Descripcion"
@@ -162,7 +168,7 @@ export default function Productos({ name }: { name: string }) {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Cantidad</legend>
                   <input
-                    defaultValue={"Prueba REACT"}
+                   
                     type="number"
                     className="input-sm input w-full"
                     placeholder="Cantidad"
@@ -217,7 +223,8 @@ export default function Productos({ name }: { name: string }) {
 
       <main className="gap-2 md:px-8">
         <BreadCumbs Rutas={Rutas} />
-        <h3 className="font-bold text-xl">{name}</h3>
+        <h3 className="font-bold text-2xl"> {name}</h3>
+        <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${dataProductos.data.length}`}</span>   </p>
         <div className="flex justify-end w-full gap-2">
           <button
             className="btn btn-neutral btn-sm"
@@ -249,7 +256,9 @@ export default function Productos({ name }: { name: string }) {
             </thead>
             <tbody>
               {dataProductos?.data.map((item, index) => (
-                <Table
+                <Table 
+                  isSubmit={isSubmit}
+                  setIsSubmit={setIsSubmit}
                   key={index}
                   index={index}
                   Item={item}
@@ -268,10 +277,14 @@ const Table = ({
   Item,
   index,
   handleUpdateProducto,
+  setIsSubmit,
+  isSubmit
 }: {
   Item: Data;
   index: number;
   handleUpdateProducto: (object: UpdateProductos) => void;
+  setIsSubmit: React.Dispatch<SetStateAction<boolean>> ;
+  isSubmit: boolean
 
 }) => {
 
@@ -348,7 +361,7 @@ const Table = ({
                   placeholder="Precio"
                 />
                 <div className="flex items-center justify-center w-full">
-                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2  border-dashed rounded-lg cursor-pointer bg-gray-50 ">
+                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2  border-dashed rounded-lg cursor-pointer border-base-300 ">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg className="w-8 h-8 mb-4 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
@@ -380,11 +393,13 @@ const Table = ({
                   "Content-Type": "application/json",
               },
               body: JSON.stringify({id_producto: Item.id_producto , estado: 2})
-            })
+            }).then((response) => {
+              if(response.ok){
+                setIsSubmit(!isSubmit)
+              } 
+            }).then((code) => console.log(`Este es la respuesta llamada code${code}`) )
             
           }}>Eliminar</button>
-
-          
           
       </td>
     </tr>

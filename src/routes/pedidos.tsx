@@ -55,13 +55,14 @@ export default function PedidosComp() {
     <div className="flex flex-col gap-2 px-8">
       <div>
         <BreadCumbs Rutas={Rutas} />
-
       </div>
       <div>
-        <h3 className="font-bold text-xl">Pedidos</h3>
+        <h3 className="font-bold text-2xl">Pedidos</h3>
       </div>
       <div className="flex justify-end gap-2">
-        <button className="btn">Crear Pedidos</button><button className="btn">Maximizar</button>
+        <button className="btn btn-neutral btn-sm" onClick={() => (
+          console.log("Hola en fetch creacion")
+        )} >Crear Pedidos</button><button className="btn btn-sm">Maximizar</button>
       </div>
       <div className="overflow-x-auto">
         <table className="table table-sm">
