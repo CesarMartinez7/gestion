@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Pedidos } from "../types/pedidos";
 import { Data } from "../types/pedidos";
 import BreadCumbs from "../ui/breadcumbs";
+import { Response } from "../types/productos";
 
 
 enum Opciones {
@@ -36,6 +37,13 @@ export default function PedidosComp() {
 
   const [data, setData] = useState<Pedidos>();
   const [isBig, setIsBig] = useState<boolean>()
+  const [dataProductos, setDataProductos] = useState<Response>()
+  const [isChangeSubmit,seIsChangeSubmit] = useState<boolean>(false)
+
+  // Referencias para la creacion de los inputs , cambiar de formato a solo cuando se habla porque las referencias se vuelven pesadas y mas cuando hay grandes cantidades de datos
+  const inputRefIdProducto = useRef<HTMLInputElement | null>(null)
+  const inputRefCantidad = useRef<HTMLInputElement | null>(null)
+
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/pedidos")
@@ -44,7 +52,7 @@ export default function PedidosComp() {
         setData(pedidos)
         console.log(data)
       });
-  }, []);
+  }, [isChangeSubmit]);
 
   return (
     <div className="flex flex-col gap-2 px-8">
@@ -57,7 +65,7 @@ export default function PedidosComp() {
       </div>
       <div className="flex justify-end gap-2">
         {/* The button to open modal */}
-        <label htmlFor="my_modal_7" className="btn btn-sm btn-neutral">Crear pedidos </label>
+        <label htmlFor="my_modal_7" className="btn btn-sm btn-neutral">Crear pedidos   </label>
 
         {/* Put this part before </body> tag */}
         <input type="checkbox" id="my_modal_7" className="modal-toggle" />
@@ -65,15 +73,32 @@ export default function PedidosComp() {
           <div className="modal-box">
             <form onSubmit={(e) => {
               e.preventDefault()
+              console.log("Ejecutado creacion")
+
+              if (inputRefCantidad && inputRefIdProducto) {
+
+                fetch("http://127.0.0.1:5000/crear_pedido", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({id_producto: inputRefIdProducto.current?.value, cantidad: inputRefCantidad.current?.value })
+                }).then((response) => {
+                  if(response.ok){
+                    seIsChangeSubmit(!isChangeSubmit)
+                  }
+                }).then((dta) => console.log(dta))
+              }
+
             }}>
               <h3 className="text-xl font-bold">Crear Pedidos 🚀!</h3>
-              <p className="py-4">This modal works with a hidden checkbox!</p>
+              <p className="py-2 font-light text-sm">Formulario creacion de pedidos</p>
               <div className="gap-2 flex-col flex">
-                <input type="text" className="input w-full" placeholder="id_producto" />
-                <input type="text" className="input w-full" placeholder="cantidad" />
-                <input type="text" className="input w-full" />
+                <input type="number" className="input w-full" placeholder="Id Producto" required ref={inputRefIdProducto} />
+                <label className="input w-full">
+                  <input type="number" required placeholder="Cantidad" ref={inputRefCantidad} />
+                </label>
                 <input type="submit" className="btn w-full btn-neutral" value={"Crear Pedidos"} />
-
               </div>
             </form>
           </div>
@@ -110,7 +135,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
   // Estados de actualizar o para ver las modales
   const [isOpenActualizar, setIsOpenActualizar] = useState(false)
   const [isOpenEliminar] = useState(false)
-  const [isPopoverChangeEstado, setIsPopoverChangeEstado] = useState<boolean>(true)
+  const [isPopoverChangeEstado, setIsPopoverChangeEstado] = useState<boolean>(false)
 
   const handleClickEliminar = (id_pedido: number) => {
     fetch("http://127.0.0.1:5000/cambiar_estado_pedidos", {
@@ -145,17 +170,17 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
             </div>
             <h3 className="text-xl" >Pedidos </h3>
             <form className="flex gap-2 flex-col">
-            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
-            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
-            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
-            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+              <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+              <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+              <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+              <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
 
             </form>
 
           </div>
         </div>
 
-      ) : (null) }
+      ) : (null)}
 
 
 
