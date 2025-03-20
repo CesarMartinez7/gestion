@@ -16,12 +16,16 @@
 }
 
 
-select {
-    font-family: Ubuntu;
-  }
+
 
 
 option{
     font-family: Ubuntu;
 }
 
+
+
+select {
+  
+  font-family: "Ubuntu";
+}

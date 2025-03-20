@@ -41,13 +41,25 @@ export default function PedidosComp() {
 
   // Manejo de errores en la creacin y elikinacion
   const [responseIsOk, setResponseIsOk] = useState<boolean>(false);
-  const [responseIsError,setResponseIsError] = useState<boolean>(false)
+  const [responseIsError, setResponseIsError] = useState<boolean>(false)
 
-  const inputRefIdProducto = useRef<HTMLInputElement | null>(null);
+
   const inputRefCantidad = useRef<HTMLInputElement | null>(null);
 
-  const [numberCount,setNumberCount] = useState<number>(10)
+  const [numberCount, setNumberCount] = useState<number>(10)
 
+  const [idSelect, setIdSelect] = useState<number>(1)
+
+  // Traer los datos de popover de creacion productos
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/productos")
+      .then((response) => response.json())
+      .then((pedidos) => setDataProductos(pedidos));
+  }, []);
+
+
+  // Pedidos Fetch principal
   useEffect(() => {
     fetch("http://127.0.0.1:5000/pedidos")
       .then((reponse) => reponse.json())
@@ -57,6 +69,8 @@ export default function PedidosComp() {
   }, [isChangeSubmit]);
 
   // Esto es lo que actualizará el estado de "responseIsOk" a false después de un tiempo (en 3 segundos)
+
+
   useEffect(() => {
     if (responseIsOk) {
       setTimeout(() => {
@@ -84,15 +98,15 @@ export default function PedidosComp() {
         </motion.div>
       )}
 
-      
-    {responseIsError && (
+
+      {responseIsError && (
         <motion.div className="chat chat-end absolute right-2.5">
           <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
             Hubo un error en la creacion del pedido ❌
           </motion.div>
         </motion.div>
       )}
-      
+
       <div>
         <BreadCumbs Rutas={Rutas} />
       </div>
@@ -116,22 +130,22 @@ export default function PedidosComp() {
                 e.preventDefault();
                 console.log("Ejecutado creacion");
 
-                if (inputRefCantidad && inputRefIdProducto) {
+                if (inputRefCantidad && idSelect) {
                   fetch("http://127.0.0.1:5000/crear_pedido", {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      id_producto: inputRefIdProducto.current?.value,
+                      id_producto: idSelect,
                       cantidad: inputRefCantidad.current?.value,
                     }),
                   })
                     .then((response) => {
                       if (response.ok) {
-                        seIsChangeSubmit(!isChangeSubmit); // Actualiza la data de pedidos
                         setResponseIsOk(true); // Muestra el mensaje de éxito
-                      }else{
+                        seIsChangeSubmit(!isChangeSubmit); // Actualiza la data de pedidos
+                      } else {
                         seIsChangeSubmit(!isChangeSubmit)
                         setResponseIsError(true)
                         console.log(response.json())
@@ -148,13 +162,20 @@ export default function PedidosComp() {
                 Formulario creacion de pedidos
               </p>
               <div className="gap-2 flex-col flex">
-                <input
-                  type="number"
-                  className="input w-full"
-                  placeholder="Id Producto"
-                  required
-                  ref={inputRefIdProducto}
-                />
+                <label htmlFor="pet-select" className="text-sm" >Selecciona tu producto</label>
+
+                <select name="pets" id="pet-select" className="btn">
+                  <option value="">Seleciona tu producto 🔽</option>
+                  {dataProductos?.data.map((producto) => (
+                    <option onClick={() => {
+                      setIdSelect(producto.id_producto)
+                      console.log(idSelect)
+                    } } >{producto.nombre}</option>
+                  ))}
+
+                </select>
+
+                <label  className="text-sm" >Cantidad</label>
                 <label className="input w-full">
                   <input
                     type="number"
@@ -193,20 +214,20 @@ export default function PedidosComp() {
             </tr>
           </thead>
           <tbody>
-            {data?.data.slice(0,numberCount).map((item, index) => (
+            {data?.data.map((item, index) => (
               <ItemTable item={item} index={index} key={item.id_pedido} isBig={isBig} />
             ))}
           </tbody>
         </table>
       </div>
-        <div className="w-full justify-end  flex gap-4">
-          <button className="btn btn-sm" onClick={() => {
-            setNumberCount(numberCount - 10)
-          }} >Pagina anterior</button>
-          <button className="btn btn-sm" onClick={() => {
-            setNumberCount(numberCount + 10)
-          }} >Pagina siguiente</button>
-        </div>
+      {/* <div className="w-full justify-end  flex gap-4">
+        <button className="btn btn-sm" onClick={() => {
+          setNumberCount(numberCount - 10)
+        }} >Pagina anterior</button>
+        <button className="btn btn-sm" onClick={() => {
+          setNumberCount(numberCount + 10)
+        }} >Pagina siguiente</button>
+      </div> */}
     </div>
   );
 }
@@ -220,19 +241,8 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
   const [isOpenEliminar] = useState(false)
   const [isPopoverChangeEstado, setIsPopoverChangeEstado] = useState<boolean>(false)
 
-  const handleClickEliminar = (id_pedido: number) => {
-    fetch("http://127.0.0.1:5000/cambiar_estado_pedidos", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id_pedido: id_pedido, estado: 4 })
-    }).then((response) => console.log(response.json()))
-  }
+ 
 
-  const handleClick = () => {
-    fetch("http://127.0.0.1:5000/pedidos").then((response) => console.log(response.json()))
-  }
 
 
   return (
@@ -261,7 +271,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
           </div>
         </div>
 
-      ) : (null)}
+      ) : null}
 
 
       <div className="w-full h-full bg-black">
@@ -273,7 +283,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
       <div className={`${isOpenEliminar ? "block" : "hidden"} w-full h-full fixed bg-black/50 `}>
         <div>Elimimar open</div>
       </div>
-      <div className={`${isOpenActualizar ? "block" : "hidden"}  w-full h-full fixed bg-black/30 shadow-lg inset-0 z-[999] flex justify-center  items-center`} >
+      {/* <div className={`${isOpenActualizar ? "block" : "hidden"}  w-full h-full fixed bg-black/30 shadow-lg inset-0 z-[999] flex justify-center  items-center`} >
         <div className="w-xl bg-base-100 p-4 rounded-md">
           <button className="cursor-pointer" onClick={() => setIsOpenActualizar(false)} >X</button>
           <h3 className="text-xl font-bold">Actualizar </h3>
@@ -284,7 +294,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
             <input type="submit" className="btn btn-neutral" value={"Actualizar Pedido"} />
           </form>
         </div>
-      </div>
+      </div> */}
       <td className="flex gap-2 w-full justify-end">
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`} onClick={() => {
           setIsOpenActualizar(true)
@@ -292,10 +302,10 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`} onClick={() => {
           console.log("dsfsjfd")
         }} > Eliminar  </button>
-        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
+        {/* <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
           setIsPopoverChangeEstado(!isPopoverChangeEstado)
           setIsOpenActualizar(true)
-        }} >Cambiar Estado</button>
+        }} >Cambiar Estado</button> */}
       </td>
     </tr>
   );

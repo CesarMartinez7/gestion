@@ -24,6 +24,8 @@ export default function Productos({ name }: { name: string }) {
 
   const [isSubmit, setIsSubmit] = useState<boolean>(false)
 
+  const [responseIsOk, setResponseIsOk] = useState<boolean>(false);
+  const [responseIsError, setResponseIsError] = useState<boolean>(false)
 
   const [selectOption, setSelectOption] = useState<string>("63")
 
@@ -43,7 +45,7 @@ export default function Productos({ name }: { name: string }) {
   const handleClickUpdate = (object: UpdateProductos) => {
     const updatedObject = { ...object };
 
-    // Si algún campo es undefined o null, lo puedes limpiar
+    // Si algún campo es undefined o null,  lo limpio
     if (updatedObject.descripcion === undefined) updatedObject.descripcion = "";
     if (updatedObject.nombre === undefined) updatedObject.nombre = "";
     if (updatedObject.precio === undefined) updatedObject.precio = 0;
@@ -77,12 +79,50 @@ export default function Productos({ name }: { name: string }) {
 
 
 
+  useEffect(() => {
+    if (responseIsOk) {
+      setTimeout(() => {
+        setResponseIsOk(false);
+      }, 5000); // Desaparece después de 3 segundos
+    }
+  }, [responseIsOk]);
+
+
+  useEffect(() => {
+    if (responseIsError) {
+      setTimeout(() => {
+        setResponseIsError(false);
+      }, 5000); // Desaparecer después de 3 segundos
+    }
+  }, [responseIsError]);
+
+
   if (!dataProductos) {
     return <Loading />;
   }
 
   return (
     <div className="p-4 w-full">
+
+
+      {responseIsOk && (
+        <motion.div className="chat chat-end absolute right-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-success font-bold" exit={{ opacity: 0, scale: 0 }}>
+            Producto Creado con éxito ✅
+          </motion.div>
+        </motion.div>
+      )}
+
+
+      {responseIsError && (
+        <motion.div className="chat chat-end absolute right-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
+            Hubo un error en la creacion del Producto ❌
+          </motion.div>
+        </motion.div>
+      )}
+
+
       {isOpen && (
         <motion.div
           className="fixed inset-0 flex items-center justify-center bg-black/60 z-[999]"
@@ -142,9 +182,17 @@ export default function Productos({ name }: { name: string }) {
                   method: "POST",
                   body: datosFomularios, // Pasar FormData en el cuerpo de la solicitud
                 })
-                  .then((response) => response.json())
+                  .then((response) => {
+                    if (response.ok) {
+                      setResponseIsOk(true); // Muestra el mensaje de éxito
+                      setIsSubmit(!isSubmit); // Actualiza la data de pedidos
+                    } else {
+                      setIsSubmit(!isSubmit)
+                      setResponseIsError(true)
+                      console.log(response.json())
+                    }
+                  })
                   .then((data) => {
-                    console.log("Producto creado:", data);
                     setIsSubmit(!isSubmit)
                   })
                   .catch((error) => {
@@ -231,7 +279,7 @@ export default function Productos({ name }: { name: string }) {
         <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${dataProductos.data.length}`}</span>   </p>
         <div className="flex justify-end w-full gap-2">
           <button
-            className="btn btn-neutral btn-sm"
+            className="btn btn-neutral btn-sm mb-2"
             onClick={() => setIsOpen(!isOpen)}
           >
             Crear {name}

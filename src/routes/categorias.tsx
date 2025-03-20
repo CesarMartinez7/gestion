@@ -212,7 +212,7 @@ export default function Categorias() {
 {responseIsOk && (
         <motion.div className="chat chat-end absolute right-2.5">
           <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-success font-bold" exit={{ opacity: 0, scale: 0 }}>
-            Pedido Creado con éxito ✅
+            Categoria Creado con éxito ✅
           </motion.div>
         </motion.div>
       )}
@@ -221,7 +221,7 @@ export default function Categorias() {
     {responseIsError && (
         <motion.div className="chat chat-end absolute right-2.5">
           <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
-            Hubo un error en la creacion del pedido ❌
+            Hubo un error en la creacion de la categoria ❌
           </motion.div>
         </motion.div>
       )}
