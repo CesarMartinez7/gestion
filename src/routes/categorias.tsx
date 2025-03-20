@@ -5,6 +5,8 @@ import CategoriaHooks from "../hooks/categoria";
 import { Response } from "../types/response";
 import BreadCumbs from "../ui/breadcumbs";
 import NotData from "../ui/notdata";
+import { useAsyncError } from "react-router-dom";
+import { motion } from "motion/react"
 
 
 
@@ -33,7 +35,7 @@ const Table = ({
     return <NotData/>
   }
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-box border border-base-content/5">
       <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
         {/* head */}
         <thead>
@@ -48,7 +50,7 @@ const Table = ({
           {Data.data.map((item, index) => (
             <tr key={item.id_categoria}>
               <th>{index + 1}</th>
-              <td className="font-semibold">{item.nombre}</td>
+              <td className="font-semibold uppercase">{item.nombre}</td>
               <td>{item.descripcion}</td>
               <td className="flex gap-2  justify-end">
                 <div>
@@ -94,9 +96,8 @@ const Table = ({
                           <button className="btn top-2">Cancelar</button>
                         </form>
                         <button
-                          className="btn "
+                          className="btn btn-error "
                           onClick={() => {
-                            
                             fetch("http://127.0.0.1:5000/cambiar_estado_categorias", {
                               method: "PUT",
                               headers: {
@@ -149,8 +150,16 @@ export default function Categorias() {
     setIsBig
   ] = CategoriaHooks();
 
+
+
+
+
+
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
     useState<boolean>(false);
+
+  const [responseIsError,setResponseIsError] = useState<boolean>(false)
+  const [responseIsOk,setResponseIsOk] = useState<boolean>(false)
 
   const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement | null>(null);
   const inputCreateCategoriaElementNombre = useRef<HTMLInputElement | null>(null);
@@ -160,7 +169,29 @@ export default function Categorias() {
     fetch("http://127.0.0.1:5000/categorias")
       .then((response) => response.json())
       .then((data) => setData(data));
-  }, [isChangeSubmit]);  // Dependemos de isChangeSubmit
+  }, [isChangeSubmit]);  // Dependemos de isChasngeSubmit
+
+
+
+  useEffect(() => {
+    if (responseIsOk) {
+      setTimeout(() => {
+        setResponseIsOk(false);
+      }, 5000); // Desaparece después de 3 segundos
+    }
+  }, [responseIsOk]);
+
+
+  useEffect(() => {
+    if (responseIsError) {
+      setTimeout(() => {
+        setResponseIsError(false);
+      }, 5000); // Desaparecer después de 3 segundos
+    }
+  }, [responseIsError]);
+
+
+
 
   const handleModalOpen = (index: number) => {
     setSelectedCategory(data?.data[index] || null);
@@ -176,6 +207,26 @@ export default function Categorias() {
   if (data) {
     return (
       <main className="flex flex-col gap-2 px-8">
+
+
+{responseIsOk && (
+        <motion.div className="chat chat-end absolute right-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-success font-bold" exit={{ opacity: 0, scale: 0 }}>
+            Pedido Creado con éxito ✅
+          </motion.div>
+        </motion.div>
+      )}
+
+      
+    {responseIsError && (
+        <motion.div className="chat chat-end absolute right-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
+            Hubo un error en la creacion del pedido ❌
+          </motion.div>
+        </motion.div>
+      )}
+
+
         <BreadCumbs Rutas={Rutas} />
         <h1 className="text-2xl font-bold">Categorías</h1>
         <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${data.data.length}`}</span> </p>
@@ -218,6 +269,9 @@ export default function Categorias() {
                       .then((response) => {
                         if(response.ok){
                           setIsChangeSubmit(!isChangeSubmit)
+                          setResponseIsOk(true)
+                        }else{
+                          setResponseIsError(true)
                         }
                       })
                       .then((data) => console.log(data)).catch((response) => console.log("error", response))                   

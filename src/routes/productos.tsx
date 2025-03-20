@@ -244,7 +244,7 @@ export default function Productos({ name }: { name: string }) {
           </button>
         </div>
 
-        {dataProductos.data.length === 0 ? (<NotData />) : (<div className="overflow-x-auto">
+        {dataProductos.data.length === 0 ? (<NotData />) : (<div className="overflow-x-auto rounded-box border border-base-content/5 ">
           <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
 
             <thead>

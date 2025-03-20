@@ -38,10 +38,15 @@ export default function PedidosComp() {
   const [isBig, setIsBig] = useState<boolean>();
   const [dataProductos, setDataProductos] = useState<Response>();
   const [isChangeSubmit, seIsChangeSubmit] = useState<boolean>(false);
+
+  // Manejo de errores en la creacin y elikinacion
   const [responseIsOk, setResponseIsOk] = useState<boolean>(false);
+  const [responseIsError,setResponseIsError] = useState<boolean>(false)
 
   const inputRefIdProducto = useRef<HTMLInputElement | null>(null);
   const inputRefCantidad = useRef<HTMLInputElement | null>(null);
+
+  const [numberCount,setNumberCount] = useState<number>(10)
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/pedidos")
@@ -60,6 +65,15 @@ export default function PedidosComp() {
     }
   }, [responseIsOk]);
 
+
+  useEffect(() => {
+    if (responseIsError) {
+      setTimeout(() => {
+        setResponseIsError(false);
+      }, 5000); // Desaparecer después de 3 segundos
+    }
+  }, [responseIsError]);
+
   return (
     <div className="flex flex-col gap-2 px-8">
       {responseIsOk && (
@@ -70,6 +84,15 @@ export default function PedidosComp() {
         </motion.div>
       )}
 
+      
+    {responseIsError && (
+        <motion.div className="chat chat-end absolute right-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
+            Hubo un error en la creacion del pedido ❌
+          </motion.div>
+        </motion.div>
+      )}
+      
       <div>
         <BreadCumbs Rutas={Rutas} />
       </div>
@@ -108,6 +131,10 @@ export default function PedidosComp() {
                       if (response.ok) {
                         seIsChangeSubmit(!isChangeSubmit); // Actualiza la data de pedidos
                         setResponseIsOk(true); // Muestra el mensaje de éxito
+                      }else{
+                        seIsChangeSubmit(!isChangeSubmit)
+                        setResponseIsError(true)
+                        console.log(response.json())
                       }
                     })
                     .catch((error) => {
@@ -153,7 +180,7 @@ export default function PedidosComp() {
           onClick={() => setIsBig(!isBig)}
         >{`${isBig ? `Minimizar` : "Maximizar"}`}</button>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto  rounded-box border border-base-content/5">
         <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
           <thead>
             <tr>
@@ -166,12 +193,20 @@ export default function PedidosComp() {
             </tr>
           </thead>
           <tbody>
-            {data?.data.map((item, index) => (
+            {data?.data.slice(0,numberCount).map((item, index) => (
               <ItemTable item={item} index={index} key={item.id_pedido} isBig={isBig} />
             ))}
           </tbody>
         </table>
       </div>
+        <div className="w-full justify-end  flex gap-4">
+          <button className="btn btn-sm" onClick={() => {
+            setNumberCount(numberCount - 10)
+          }} >Pagina anterior</button>
+          <button className="btn btn-sm" onClick={() => {
+            setNumberCount(numberCount + 10)
+          }} >Pagina siguiente</button>
+        </div>
     </div>
   );
 }
@@ -195,7 +230,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
     }).then((response) => console.log(response.json()))
   }
 
-  const handleClickActualizar = () => {
+  const handleClick = () => {
     fetch("http://127.0.0.1:5000/pedidos").then((response) => console.log(response.json()))
   }
 
@@ -256,7 +291,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
         }} >Actualizar</button>
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`} onClick={() => {
           console.log("dsfsjfd")
-        }} >Eliminar</button>
+        }} > Eliminar  </button>
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
           setIsPopoverChangeEstado(!isPopoverChangeEstado)
           setIsOpenActualizar(true)
