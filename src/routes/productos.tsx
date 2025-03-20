@@ -152,7 +152,6 @@ export default function Productos({ name }: { name: string }) {
                   });
 
                 console.log(datosFomularios)
-
               }}
             >
               <div className="flex gap-2 flex-col">
