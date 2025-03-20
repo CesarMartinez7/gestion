@@ -3,7 +3,7 @@ import { Pedidos } from "../types/pedidos";
 import { Data } from "../types/pedidos";
 import BreadCumbs from "../ui/breadcumbs";
 import { Response } from "../types/productos";
-
+import { motion } from "motion/react"
 
 enum Opciones {
   INACTIVO = 1,
@@ -34,80 +34,127 @@ const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
 }
 
 export default function PedidosComp() {
-
   const [data, setData] = useState<Pedidos>();
-  const [isBig, setIsBig] = useState<boolean>()
-  const [dataProductos, setDataProductos] = useState<Response>()
-  const [isChangeSubmit,seIsChangeSubmit] = useState<boolean>(false)
+  const [isBig, setIsBig] = useState<boolean>();
+  const [dataProductos, setDataProductos] = useState<Response>();
+  const [isChangeSubmit, seIsChangeSubmit] = useState<boolean>(false);
+  const [responseIsOk, setResponseIsOk] = useState<boolean>(false);
 
-  // Referencias para la creacion de los inputs , cambiar de formato a solo cuando se habla porque las referencias se vuelven pesadas y mas cuando hay grandes cantidades de datos
-  const inputRefIdProducto = useRef<HTMLInputElement | null>(null)
-  const inputRefCantidad = useRef<HTMLInputElement | null>(null)
-
+  const inputRefIdProducto = useRef<HTMLInputElement | null>(null);
+  const inputRefCantidad = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/pedidos")
       .then((reponse) => reponse.json())
       .then((pedidos) => {
-        setData(pedidos)
-        console.log(data)
+        setData(pedidos);
       });
   }, [isChangeSubmit]);
 
+  // Esto es lo que actualizará el estado de "responseIsOk" a false después de un tiempo (en 3 segundos)
+  useEffect(() => {
+    if (responseIsOk) {
+      setTimeout(() => {
+        setResponseIsOk(false);
+      }, 5000); // Desaparece después de 3 segundos
+    }
+  }, [responseIsOk]);
+
   return (
     <div className="flex flex-col gap-2 px-8">
+      {responseIsOk && (
+        <motion.div className="chat chat-end absolute right-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-success font-bold" exit={{ opacity: 0, scale: 0 }}>
+            Pedido Creado con éxito ✅
+          </motion.div>
+        </motion.div>
+      )}
+
       <div>
         <BreadCumbs Rutas={Rutas} />
       </div>
       <div>
         <h3 className="font-bold text-2xl">Pedidos</h3>
-        <p className="text-xs text-opacity-100">{` Registros disponibles`} : <span className="text-green-500 font-bold">{`${data?.data.length}`}</span> </p>
+        <p className="text-xs text-opacity-100">
+          {` Registros disponibles`} :{" "}
+          <span className="text-green-500 font-bold">{`${data?.data.length}`}</span>{" "}
+        </p>
       </div>
       <div className="flex justify-end gap-2">
-        {/* The button to open modal */}
-        <label htmlFor="my_modal_7" className="btn btn-sm btn-neutral">Crear pedidos   </label>
+        <label htmlFor="my_modal_7" className="btn btn-sm btn-neutral">
+          Crear pedidos
+        </label>
 
-        {/* Put this part before </body> tag */}
         <input type="checkbox" id="my_modal_7" className="modal-toggle" />
         <div className="modal" role="dialog">
           <div className="modal-box">
-            <form onSubmit={(e) => {
-              e.preventDefault()
-              console.log("Ejecutado creacion")
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log("Ejecutado creacion");
 
-              if (inputRefCantidad && inputRefIdProducto) {
-
-                fetch("http://127.0.0.1:5000/crear_pedido", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify({id_producto: inputRefIdProducto.current?.value, cantidad: inputRefCantidad.current?.value })
-                }).then((response) => {
-                  if(response.ok){
-                    seIsChangeSubmit(!isChangeSubmit)
-                  }
-                }).then((dta) => console.log(dta))
-              }
-
-            }}>
+                if (inputRefCantidad && inputRefIdProducto) {
+                  fetch("http://127.0.0.1:5000/crear_pedido", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      id_producto: inputRefIdProducto.current?.value,
+                      cantidad: inputRefCantidad.current?.value,
+                    }),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        seIsChangeSubmit(!isChangeSubmit); // Actualiza la data de pedidos
+                        setResponseIsOk(true); // Muestra el mensaje de éxito
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Error en la creación del pedido:", error);
+                    });
+                }
+              }}
+            >
               <h3 className="text-xl font-bold">Crear Pedidos 🚀!</h3>
-              <p className="py-2 font-light text-sm">Formulario creacion de pedidos</p>
+              <p className="py-2 font-light text-sm">
+                Formulario creacion de pedidos
+              </p>
               <div className="gap-2 flex-col flex">
-                <input type="number" className="input w-full" placeholder="Id Producto" required ref={inputRefIdProducto} />
+                <input
+                  type="number"
+                  className="input w-full"
+                  placeholder="Id Producto"
+                  required
+                  ref={inputRefIdProducto}
+                />
                 <label className="input w-full">
-                  <input type="number" required placeholder="Cantidad" ref={inputRefCantidad} />
+                  <input
+                    type="number"
+                    required
+                    placeholder="Cantidad"
+                    ref={inputRefCantidad}
+                  />
                 </label>
-                <input type="submit" className="btn w-full btn-neutral" value={"Crear Pedidos"} />
+                <input
+                  type="submit"
+                  className="btn w-full btn-neutral"
+                  value={"Crear Pedidos"}
+                />
               </div>
             </form>
           </div>
-          <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
+          <label className="modal-backdrop" htmlFor="my_modal_7">
+            Close
+          </label>
         </div>
-        <button className="btn btn-sm" onClick={() => setIsBig(!isBig)}>  {isBig ? `Minimizar` : "Maximizar"} </button>
+        <button
+          className="btn btn-sm"
+          onClick={() => setIsBig(!isBig)}
+        >{`${isBig ? `Minimizar` : "Maximizar"}`}</button>
       </div>
       <div className="overflow-x-auto">
-        <table className={`table ${isBig ? "table-sm" : "table-xs"} `}>
+        <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
           <thead>
             <tr>
               <th></th>
@@ -128,6 +175,7 @@ export default function PedidosComp() {
     </div>
   );
 }
+
 
 const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: boolean | undefined }) => {
 
@@ -174,31 +222,33 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
               <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
               <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
               <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
-
             </form>
-
           </div>
         </div>
 
       ) : (null)}
 
 
-
-
       <div className="w-full h-full bg-black">
-
       </div>
       <div className="w-full h-full bg-black">
-
       </div>
-
 
 
       <div className={`${isOpenEliminar ? "block" : "hidden"} w-full h-full fixed bg-black/50 `}>
         <div>Elimimar open</div>
       </div>
-      <div className={`${isOpenActualizar ? "block" : "hidden"} w-full h-full fixed bg-black/50`} >
-        <div>Actualizar open</div>
+      <div className={`${isOpenActualizar ? "block" : "hidden"}  w-full h-full fixed bg-black/30 shadow-lg inset-0 z-[999] flex justify-center  items-center`} >
+        <div className="w-xl bg-base-100 p-4 rounded-md">
+          <button className="cursor-pointer" onClick={() => setIsOpenActualizar(false)} >X</button>
+          <h3 className="text-xl font-bold">Actualizar </h3>
+          <form className="flex flex-col gap-2">
+            <input type="text" className="input w-full" />
+            <input type="text" className="input w-full" />
+            <input type="text" className="input w-full" />
+            <input type="submit" className="btn btn-neutral" value={"Actualizar Pedido"} />
+          </form>
+        </div>
       </div>
       <td className="flex gap-2 w-full justify-end">
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`} onClick={() => {
@@ -210,7 +260,7 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
           setIsPopoverChangeEstado(!isPopoverChangeEstado)
           setIsOpenActualizar(true)
-        }}    >Cambiar Estado</button>
+        }} >Cambiar Estado</button>
       </td>
     </tr>
   );

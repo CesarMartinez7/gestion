@@ -1,8 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
 import { routers } from "./navbar";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import useThemeStore from "../stores/theme-store";
 
 export default function SiderBar() {
+
+  const { theme, toggleTheme } = useThemeStore()
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -10,7 +14,7 @@ export default function SiderBar() {
       {/* Contenedor del contenido de la página */}
       <div className="drawer-content flex flex-col w-full min-h-svh">
         {/* Botón para abrir el sidebar en pantallas pequeñas */}
-        
+
         {/* Aquí se renderiza la página actual */}
         <div className="md:p-4 h-full">
           <Outlet />
@@ -29,9 +33,9 @@ export default function SiderBar() {
             <li>
               <a className="flex justify-between">
                 <span className="flex gap-2">
-                <Icon icon="lucide:database" width="20" height="20" /> Opciones
+                  <Icon icon="lucide:database" width="20" height="20" /> Opciones
                 </span>
-               <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
+                <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
               </a>
               <ul>
                 {routers.map((route) => (
@@ -54,6 +58,21 @@ export default function SiderBar() {
               {" "}
               <Icon icon="lucide:log-in" width="19" height="19" /> Cerrar Sesion{" "}
             </a>
+          </li>
+          <li>
+            <button className="md:hidden" onClick={() => {
+              const htmlEtiqueta = document.getElementById("html")
+              console.log(htmlEtiqueta)
+              toggleTheme()
+              htmlEtiqueta?.setAttribute("data-theme", theme)
+            }} >
+              {" "}
+              {theme === "light" ? <Icon icon="lucide:moon" width="20" height="20" /> : <Icon icon="lucide:sun-medium" width="24" height="24" />} Modo {theme} {" "}
+            </button>
+            
+          </li>
+          <li>
+            <button className="md:hidden" > <Icon icon="lucide:user" width="20" height="20" /> Informacion usuario </button>
           </li>
         </ul>
       </div>

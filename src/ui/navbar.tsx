@@ -24,10 +24,10 @@ export default function Navbar() {
         }} title="Set themes jaja">
           {theme === "light" ? <Icon icon="lucide:moon" width="24" height="24" /> : <Icon icon="lucide:sun-medium" width="24" height="24" /> }  
         </button>
-        <button title="User Registrer" className="btn btn-ghost btn-circle hidden md:flex">
+        <button title="User Registrer" className="btn  lg:hidden btn-ghost btn-circle md:flex">
           <Icon icon="lucide:user" width="24" height="24" />
         </button>
-        <label className="btn btn-circle btn-ghost lg:hidden" htmlFor="my-drawer-2"  >
+        <label className="btn btn-circle btn-ghost  lg:hidden" htmlFor="my-drawer-2"  >
           <Icon icon="lucide:list" width="24" height="24" />
         </label>
       </div>
