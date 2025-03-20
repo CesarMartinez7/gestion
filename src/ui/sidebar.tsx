@@ -8,15 +8,9 @@ export default function SiderBar() {
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 
       {/* Contenedor del contenido de la página */}
-      <div className="drawer-content flex flex-col w-full">
+      <div className="drawer-content flex flex-col w-full min-h-svh">
         {/* Botón para abrir el sidebar en pantallas pequeñas */}
-        <label
-          htmlFor="my-drawer-2"
-          className="btn btn-primary btn-sm drawer-button lg:hidden"
-        >
-          Barra Lateral
-        </label>
-
+        
         {/* Aquí se renderiza la página actual */}
         <div className="md:p-4 h-full">
           <Outlet />
@@ -30,11 +24,14 @@ export default function SiderBar() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+        <ul className="menu bg-base-200 text-base-content min-h-full w-72 p-4">
           <ul className="menu bg-base-200 rounded-box w-56">
             <li>
-              <a className="flex justify-between ">
-                Tablas <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
+              <a className="flex justify-between">
+                <span className="flex gap-2">
+                <Icon icon="lucide:database" width="20" height="20" /> Opciones
+                </span>
+               <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
               </a>
               <ul>
                 {routers.map((route) => (

@@ -14,5 +14,5 @@ export interface Data {
     id_producto: number
     imagenes: null | undefined
     nombre: string
-    precio: bigint
+    precio: number
 }

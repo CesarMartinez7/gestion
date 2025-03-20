@@ -61,7 +61,7 @@ class PedidosQuery:
         if nuevo_estado not in transiciones_validas.get(estado_actual, []):
             estado_actual_nombre = estado_nombres.get(estado_actual, estado_actual)
             nuevo_estado_nombre = estado_nombres.get(nuevo_estado, nuevo_estado)
-            return f"No se puede cambiar el estado de {estado_actual_nombre} a {nuevo_estado_nombre}. Orden permitido: PENDIENTE → EN PROCESO → ENTREGADO/CANCELADO."
+            return f"No se puede cambiar el estado de {estado_actual_nombre} a {nuevo_estado_nombre}. Orden permitido: PENDIENTE -> EN PROCESO -> ENTREGADO/CANCELADO."
         print(pedido.cantidad)
         pedido.estado = nuevo_estado  
         registro = HistorialCambiosPedidos(id_pedido=pedido.id_pedido, cantidad=pedido.cantidad, precio_unitario=pedido.precio_unitario, estado=pedido.estado)

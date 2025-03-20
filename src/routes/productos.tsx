@@ -90,7 +90,7 @@ export default function Productos({ name }: { name: string }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="">
+          <div >
             <div>dsfsf</div>
           </div>
           <motion.div
@@ -196,17 +196,11 @@ export default function Productos({ name }: { name: string }) {
 
                   ))}
                 </select>
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Precio</legend>
-                  <input
-                    defaultValue={"Prueba REACT"}
-                    type="number"
-                    className="input-sm input w-full"
-                    placeholder="Precio"
-                    ref={inputRefPrecio}
-                  />
-                </fieldset>
-
+                <label className="input validator w-full">
+                  <Icon icon="lucide:circle-dollar-sign" width="20" height="20" />
+                  <input type="number" placeholder="1200" required ref={inputRefPrecio} />
+                </label>
+                <div className="validator-hint hidden">Enter valid email address</div>
 
                 <div className="flex items-center justify-center w-full">
                   <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-base-300  border-dashed rounded-lg cursor-pointer  ">
@@ -252,33 +246,33 @@ export default function Productos({ name }: { name: string }) {
         </div>
 
         {dataProductos.data.length === 0 ? (<NotData />) : (<div className="overflow-x-auto">
-           <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
-            
-          <thead>
-          <tr>
-            <th></th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Cantidad</th>
-            <th className="flex items-center">
-              <Icon icon="lucide:dollar-sign" width="14" height="14" />
-              Precio
-            </th>
-            <th>Opciones</th>
-          </tr>
-        </thead>
-        <tbody className="">
-          {dataProductos.data.map((item, index) => (
-            <Table
-              isSubmit={isSubmit}
-              setIsSubmit={setIsSubmit}
-              key={index}
-              index={index}
-              Item={item}
-              handleUpdateProducto={handleClickUpdate}
-            />
-          ))}
-        </tbody></table> </div>)}
+          <table className={`table ${isBig ? "table-sm" : "table-xs"}`}>
+
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th className="flex items-center">
+                  <Icon icon="lucide:dollar-sign" width="14" height="14" />
+                  Precio
+                </th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody className="">
+              {dataProductos.data.map((item, index) => (
+                <Table
+                  isSubmit={isSubmit}
+                  setIsSubmit={setIsSubmit}
+                  key={index}
+                  index={index}
+                  Item={item}
+                  handleUpdateProducto={handleClickUpdate}
+                />
+              ))}
+            </tbody></table> </div>)}
       </main>
     </div>
   );
@@ -381,7 +375,7 @@ const Table = ({
             </form>
           </div>
         </dialog>
-        
+
         <button className="btn btn-soft btn-error btn-sm" onClick={
           () => {
             fetch("http://127.0.0.1:5000/cambiar_estado_productos", {

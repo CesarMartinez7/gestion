@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Pedidos } from "../types/pedidos";
 import { Data } from "../types/pedidos";
 import BreadCumbs from "../ui/breadcumbs";
@@ -18,13 +18,13 @@ const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
   if (opciones === Opciones.ACTIVO) {
     return <h3 className="font-bold">Activo</h3>
   } else if (opciones === Opciones.INACTIVO) {
-    return <h3 className="text-zinc-600 font-bold">Inactivo</h3>
+    return <h3 className="text-zinc-600 font-bold">Inactivo  {Opciones.ACTIVO} </h3>
   } else if (opciones === Opciones.CANCELADO) {
     return <h3 className="text-red-500 font-bold">Cancelado</h3>
   } else if (opciones === Opciones.ENTREGADO) {
     return <h3 className="text-green-500 font-bold">Entregado</h3>
   } else if (opciones === Opciones.PENDIENTE) {
-    return <h3 className="text-yellow-500 font-bold">Pendiente</h3>
+    return <h3 className="text-yellow-500 font-bold">Pendiente  </h3>
   } else if (opciones === Opciones.EN_PROCESO) {
     return <h3 className="text-orange-500 font-bold">En proceso </h3>
   }
@@ -66,15 +66,15 @@ export default function PedidosComp() {
             <form onSubmit={(e) => {
               e.preventDefault()
             }}>
-            <h3 className="text-xl font-bold">Crear Pedidos 🚀!</h3>
-            <p className="py-4">This modal works with a hidden checkbox!</p>
-            <div className="gap-2 flex-col flex">
-              <input type="text" className="input w-full" />
-              <input type="text" className="input w-full" />
-              <input type="text" className="input w-full" />
-              <input type="submit" className="btn w-full btn-neutral" value={"Crear Pedidos"} />
+              <h3 className="text-xl font-bold">Crear Pedidos 🚀!</h3>
+              <p className="py-4">This modal works with a hidden checkbox!</p>
+              <div className="gap-2 flex-col flex">
+                <input type="text" className="input w-full" placeholder="id_producto" />
+                <input type="text" className="input w-full" placeholder="cantidad" />
+                <input type="text" className="input w-full" />
+                <input type="submit" className="btn w-full btn-neutral" value={"Crear Pedidos"} />
 
-            </div>
+              </div>
             </form>
           </div>
           <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
@@ -105,11 +105,21 @@ export default function PedidosComp() {
 }
 
 const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: boolean | undefined }) => {
+
+
+  // Estados de actualizar o para ver las modales
   const [isOpenActualizar, setIsOpenActualizar] = useState(false)
-  const [isOpenEliminar, setIsOpenEliminar] = useState(false)
+  const [isOpenEliminar] = useState(false)
+  const [isPopoverChangeEstado, setIsPopoverChangeEstado] = useState<boolean>(true)
 
-  const handleClickEliminar = () => {
-
+  const handleClickEliminar = (id_pedido: number) => {
+    fetch("http://127.0.0.1:5000/cambiar_estado_pedidos", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id_pedido: id_pedido, estado: 4 })
+    }).then((response) => console.log(response.json()))
   }
 
   const handleClickActualizar = () => {
@@ -124,6 +134,41 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
       <td>{item.cantidad}</td>
       <td>{item.fecha}</td>
       <td>{item.id_producto}</td>
+
+      {/* // Modales Hechas con react */}
+
+      {isPopoverChangeEstado ? (
+        <div className="w-full h-full fixed inset-0 flex items-center justify-center bg-black/5 z-[999]  ">
+          <div className="bg-base-100 p-4 w-xl rounded-md" >
+            <div className="flex justify-end w-full">
+              <button className="btn btn-ghost btn-circle" onClick={() => setIsPopoverChangeEstado(false)} >x</button>
+            </div>
+            <h3 className="text-xl" >Pedidos </h3>
+            <form className="flex gap-2 flex-col">
+            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+            <input type="text" placeholder="Xsmall" className="input input-sm w-full" />
+
+            </form>
+
+          </div>
+        </div>
+
+      ) : (null) }
+
+
+
+
+      <div className="w-full h-full bg-black">
+
+      </div>
+      <div className="w-full h-full bg-black">
+
+      </div>
+
+
+
       <div className={`${isOpenEliminar ? "block" : "hidden"} w-full h-full fixed bg-black/50 `}>
         <div>Elimimar open</div>
       </div>
@@ -135,8 +180,12 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
           setIsOpenActualizar(true)
         }} >Actualizar</button>
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`} onClick={() => {
-          setIsOpenEliminar(true)
+          console.log("dsfsjfd")
         }} >Eliminar</button>
+        <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
+          setIsPopoverChangeEstado(!isPopoverChangeEstado)
+          setIsOpenActualizar(true)
+        }}    >Cambiar Estado</button>
       </td>
     </tr>
   );

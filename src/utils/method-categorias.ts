@@ -48,7 +48,7 @@ export const handleClickDelete = ({
   };
 
 
-
+  
 export const handleClickCreate = (data: CreateHandleClickProps) => {
     fetch("http://127.0.0.1:5000/ingresar_categorias", {
       method: "POST",

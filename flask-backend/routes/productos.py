@@ -78,8 +78,8 @@ def actualizar_producto():
         # Obtener datos del cuerpo de la solicitud
         valores_productos = {
             "id_producto": request.json.get("id_producto"),
-            "nombre": request.json.get("nombre"),
-            "descripcion": request.json.get("descripcion"),
+            "nombre": request.json.get("nombre"), # ✅
+            "descripcion": request.json.get("descripcion"), # ✅
             "cantidad": request.json.get("cantidad"),
             "precio": request.json.get("precio"),
         }

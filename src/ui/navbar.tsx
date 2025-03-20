@@ -9,24 +9,27 @@ export default function Navbar() {
   const { theme, toggleTheme } = useThemeStore()
 
   return (
-    <div className="navbar shadow-sm px-10">
+    <div className="navbar shadow-sm md:px-10">
       <div className="flex-1">
         <Link to={"/"}>
           <img src={theme === "dark" ? Red5GLogoBlack : Red5GLogoWhite} alt="Red5G Logo" width={60} height={30} />
         </Link>
       </div>
-      <div className="flex gap-3.5">
+      <div className="flex gap-2.5">
         <button className="btn btn-ghost btn-circle" onClick={() => {
           const htmlEtiqueta = document.getElementById("html")
           console.log(htmlEtiqueta)
           toggleTheme()
           htmlEtiqueta?.setAttribute("data-theme", theme)
         }} title="Set themes jaja">
-          <Icon icon="lucide:sun-medium" width="24" height="24" />
+          {theme === "light" ? <Icon icon="lucide:moon" width="24" height="24" /> : <Icon icon="lucide:sun-medium" width="24" height="24" /> }  
         </button>
-        <button title="User Registrer" className="btn btn-ghost btn-circle">
+        <button title="User Registrer" className="btn btn-ghost btn-circle hidden md:flex">
           <Icon icon="lucide:user" width="24" height="24" />
         </button>
+        <label className="btn btn-circle btn-ghost lg:hidden" htmlFor="my-drawer-2"  >
+          <Icon icon="lucide:list" width="24" height="24" />
+        </label>
       </div>
     </div>
   );

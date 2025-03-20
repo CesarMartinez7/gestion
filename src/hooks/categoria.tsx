@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Response } from "../types/response";
-import { Data } from "../types/response";
+import { Response, Data } from "../types/response";
 
 type CategoriaHooksReturn = [
   Response | undefined,
@@ -11,7 +10,7 @@ type CategoriaHooksReturn = [
   React.Dispatch<React.SetStateAction<boolean>>,
   Data | null,
   React.Dispatch<React.SetStateAction<Data | null>>,
-  React.RefObject<HTMLInputElement | null > ,
+  React.RefObject<HTMLInputElement | null>,
   React.RefObject<HTMLInputElement | null>,
   boolean,
   React.Dispatch<React.SetStateAction<boolean>>
@@ -24,7 +23,7 @@ export default function CategoriaHooks(): CategoriaHooksReturn {
   const [selectedCategory, setSelectedCategory] = useState<Data | null>(null);
   const inputRefDescripcion = useRef<HTMLInputElement | null>(null);
   const inputRefNombre = useRef<HTMLInputElement | null>(null);
-  const [isBig,setIsBig] = useState<boolean>(false)
+  const [isBig, setIsBig] = useState<boolean>(false);
 
   return [
     data,
@@ -38,6 +37,6 @@ export default function CategoriaHooks(): CategoriaHooksReturn {
     inputRefDescripcion,
     inputRefNombre,
     isBig,
-    setIsBig
+    setIsBig,
   ];
 }
