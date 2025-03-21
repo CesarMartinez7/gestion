@@ -1,6 +1,5 @@
 import "./App.css";
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Layout from "./layout";
 import { Main, Pedidos, Productos, Categorias, NotFoundPage, Login } from "./routes/lazy-routes";
 import Historial from "./routes/historial";
