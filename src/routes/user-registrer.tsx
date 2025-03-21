@@ -99,7 +99,7 @@ export default function UserRegistrer() {
           </button>
         </fieldset>
       </form>
-          <button onClick={toggleTheme}>Theme</button>
+          <button onClick={toggleTheme}>Theme</button >
     </main>
   );
 }
