@@ -5,7 +5,7 @@ import CategoriaHooks from "../hooks/categoria";
 import { Response } from "../types/response";
 import BreadCumbs from "../ui/breadcumbs";
 import NotData from "../ui/notdata";
-import { useAsyncError } from "react-router-dom";
+
 import { motion } from "motion/react"
 
 

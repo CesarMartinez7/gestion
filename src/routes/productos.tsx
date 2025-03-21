@@ -192,7 +192,7 @@ export default function Productos({ name }: { name: string }) {
                       console.log(response.json())
                     }
                   })
-                  .then((data) => {
+                  .then(() => {
                     setIsSubmit(!isSubmit)
                   })
                   .catch((error) => {
@@ -340,11 +340,11 @@ const Table = ({
 
 }) => {
 
-  const [isOpenDeletePopover] = useState<boolean>(false)
+
   const inputRefNombreUpdate = useRef<HTMLInputElement>(null)
   const inputRefCantidadUpdate = useRef<HTMLInputElement>(null)
   const inputRefPrecioUpdate = useRef<HTMLInputElement>(null)
-  const inputRefImagenesUpdate = useRef<HTMLInputElement>(null)
+ 
   const inputRefDescripcionUpdate = useRef<HTMLInputElement>(null)
 
 

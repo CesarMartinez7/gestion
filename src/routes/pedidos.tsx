@@ -30,10 +30,11 @@ const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
     return <h3 className="text-orange-500 font-bold">En proceso </h3>
   }
 
-
 }
 
 export default function PedidosComp() {
+
+
   const [data, setData] = useState<Pedidos>();
   const [isBig, setIsBig] = useState<boolean>();
   const [dataProductos, setDataProductos] = useState<Response>();
@@ -43,10 +44,7 @@ export default function PedidosComp() {
   const [responseIsOk, setResponseIsOk] = useState<boolean>(false);
   const [responseIsError, setResponseIsError] = useState<boolean>(false)
 
-
   const inputRefCantidad = useRef<HTMLInputElement | null>(null);
-
-  const [numberCount, setNumberCount] = useState<number>(10)
 
   const [idSelect, setIdSelect] = useState<number>(1)
 
@@ -210,7 +208,6 @@ export default function PedidosComp() {
               <th>Cantidad</th>
               <th>Fecha</th>
               <td>Id Producto</td>
-              <td>Opciones</td>
             </tr>
           </thead>
           <tbody>
@@ -233,17 +230,15 @@ export default function PedidosComp() {
 }
 
 
-const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: boolean | undefined }) => {
+const ItemTable = ({ item, index  }: { item: Data, index: number}) => {
 
 
   // Estados de actualizar o para ver las modales
-  const [isOpenActualizar, setIsOpenActualizar] = useState(false)
+ 
   const [isOpenEliminar] = useState(false)
   const [isPopoverChangeEstado, setIsPopoverChangeEstado] = useState<boolean>(false)
 
  
-
-
 
   return (
     <tr>
@@ -295,18 +290,18 @@ const ItemTable = ({ item, index, isBig }: { item: Data, index: number, isBig: b
           </form>
         </div>
       </div> */}
-      <td className="flex gap-2 w-full justify-end">
+      {/* <td className="flex gap-2 w-full justify-end">
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-info`} onClick={() => {
           setIsOpenActualizar(true)
         }} >Actualizar</button>
         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-error`} onClick={() => {
           console.log("dsfsjfd")
         }} > Eliminar  </button>
-        {/* <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
+         <button className={`btn btn-soft ${isBig ? "btn-sm" : "btn-xs"}  btn-success`} onClick={() => {
           setIsPopoverChangeEstado(!isPopoverChangeEstado)
           setIsOpenActualizar(true)
-        }} >Cambiar Estado</button> */}
-      </td>
+        }} >Cambiar Estado</button> 
+      </td> */}
     </tr>
   );
 };
