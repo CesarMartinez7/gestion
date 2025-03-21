@@ -14,18 +14,20 @@ const Table = ({
   handleModalOpen,
   isBig,
   isChangeSubmit,
-  setIsChangeSubmit
-  
+  setIsChangeSubmit,
+  token
+
 }: {
   Data: Response;
   handleModalOpen: Function;
   isBig: boolean;
   isChangeSubmit: boolean;
-  setIsChangeSubmit: React.Dispatch<SetStateAction<boolean>>
+  setIsChangeSubmit: React.Dispatch<SetStateAction<boolean>>;
+  token: string
 }) => {
 
-  if(Data.data.length === 0){
-    return <NotData/>
+  if (Data.data.length === 0) {
+    return <NotData />
   }
   return (
     <div className="overflow-x-auto rounded-box border border-base-content/5">
@@ -95,7 +97,7 @@ const Table = ({
                               method: "PUT",
                               headers: {
                                 "Content-Type": "application/json",
-                                "Authorization":  ""
+                                "Authorization": ` Bearer ${token}`
                               },
                               body: JSON.stringify({
                                 estado: 2,
@@ -103,7 +105,7 @@ const Table = ({
                               }),
                             })
                               .then((response) => {
-                                if(response.ok){
+                                if (response.ok) {
                                   setIsChangeSubmit(!isChangeSubmit)
                                 }
                               })
@@ -128,7 +130,7 @@ const Table = ({
   );
 };
 
-export default function Categorias() {
+export default function Categorias({ token }: { token: string }) {
   const [
     data,
     setData,
@@ -147,18 +149,18 @@ export default function Categorias() {
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
     useState<boolean>(false);
 
-  const [responseIsError,setResponseIsError] = useState<boolean>(false)
-  const [responseIsOk,setResponseIsOk] = useState<boolean>(false)
+  const [responseIsError, setResponseIsError] = useState<boolean>(false)
+  const [responseIsOk, setResponseIsOk] = useState<boolean>(false)
 
   const inputCreateCategoriaElementDescripcion = useRef<HTMLInputElement | null>(null);
   const inputCreateCategoriaElementNombre = useRef<HTMLInputElement | null>(null);
 
   // Petición para cargar las categorías
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/categorias",{
+    fetch("http://127.0.0.1:5000/categorias", {
       headers: {
-        "Content-Type" : "application/json",
-        'Authorization': "Bearer d7eaabf1266596b22b64b511caf21bff6ad597e71d45373cb8dec7a4814ca3d5 "
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
       }
     })
       .then((response) => response.json())
@@ -203,22 +205,22 @@ export default function Categorias() {
       <main className="flex flex-col gap-2 px-8">
 
 
-{responseIsOk && (
-        <motion.div className="chat chat-end absolute right-2.5">
-          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-success font-bold" exit={{ opacity: 0, scale: 0 }}>
-            Categoria Creado con éxito ✅
+        {responseIsOk && (
+          <motion.div className="chat chat-end absolute right-2.5">
+            <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-success font-bold" exit={{ opacity: 0, scale: 0 }}>
+              Categoria Creado con éxito ✅
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
 
-      
-    {responseIsError && (
-        <motion.div className="chat chat-end absolute right-2.5">
-          <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
-            Hubo un error en la creacion de la categoria ❌
+
+        {responseIsError && (
+          <motion.div className="chat chat-end absolute right-2.5">
+            <motion.div initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} className="chat-bubble chat-bubble-error font-bold" exit={{ opacity: 0, scale: 0 }}>
+              Hubo un error en la creacion de la categoria ❌
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
 
 
         <BreadCumbs Rutas={Rutas} />
@@ -241,19 +243,20 @@ export default function Categorias() {
               </h1>
 
               {/* Formulario */}
-              <form  
+              <form
                 className="flex flex-col gap-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (
                     inputCreateCategoriaElementDescripcion.current?.value &&
                     inputCreateCategoriaElementNombre.current?.value
-                  ){
-                    
+                  ) {
+
                     fetch("http://127.0.0.1:5000/ingresar_categorias", {
                       method: "POST",
                       headers: {
                         "Content-Type": "application/json",
+                        "Authorization": ` Bearer ${token}`
                       },
                       body: JSON.stringify({
                         nombre: inputCreateCategoriaElementNombre.current.value,
@@ -261,14 +264,14 @@ export default function Categorias() {
                       }),
                     })
                       .then((response) => {
-                        if(response.ok){
+                        if (response.ok) {
                           setIsChangeSubmit(!isChangeSubmit)
                           setResponseIsOk(true)
-                        }else{
+                        } else {
                           setResponseIsError(true)
                         }
                       })
-                      .then((data) => console.log(data)).catch((response) => console.log("error", response))                   
+                      .then((data) => console.log(data)).catch((response) => console.log("error", response))
                   }
                 }}
               >
@@ -333,57 +336,59 @@ export default function Categorias() {
                       method: "PUT",
                       headers: {
                         "Content-Type": "application/json",
+                        "Authorization" : `Bearer ${token}`
                       },
-                      body: JSON.stringify({
-                        nombre: inputRefNombre.current.value,
-                        descripcion: inputRefDescripcion.current.value,
-                        id_categoria: selectedCategory.id_categoria
+              body: JSON.stringify({
+                nombre: inputRefNombre.current.value,
+              descripcion: inputRefDescripcion.current.value,
+              id_categoria: selectedCategory.id_categoria
                       }),
                     })
                       .then((response) => {
                         if(response.ok) {
-                          setIsChangeSubmit(!isChangeSubmit)
-                        } 
+                setIsChangeSubmit(!isChangeSubmit)
+              } 
                       })
                       .then((json) => console.log(json))
                       .catch((err) => console.log(err));
                   }
-                  handleModalClose();
+              handleModalClose();
                 }}
               >
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                  ✕
-                </button>
-                <div className="grid grid-cols-1 gap-3">
-                  <h3 className="font-bold text-lg uppercase">
-                    {selectedCategory.nombre}
-                  </h3>
-                  <p className="text-sm">{selectedCategory.descripcion}</p>
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+              <div className="grid grid-cols-1 gap-3">
+                <h3 className="font-bold text-lg uppercase">
+                  {selectedCategory.nombre}
+                </h3>
+                <p className="text-sm">{selectedCategory.descripcion}</p>
 
-                  <input
-                    ref={inputRefNombre}
-                    type="text"
-                    defaultValue={selectedCategory.nombre}
-                    className="input w-full"
-                  />
-                  <input
-                    ref={inputRefDescripcion}
-                    type="text"
-                    defaultValue={selectedCategory.descripcion}
-                    className="input w-full"
-                  />
-                  <button className="btn btn-neutral">Enviar</button>
-                </div>
-              </form>
-            </div>
+                <input
+                  ref={inputRefNombre}
+                  type="text"
+                  defaultValue={selectedCategory.nombre}
+                  className="input w-full"
+                />
+                <input
+                  ref={inputRefDescripcion}
+                  type="text"
+                  defaultValue={selectedCategory.descripcion}
+                  className="input w-full"
+                />
+                <button className="btn btn-neutral">Enviar</button>
+              </div>
+            </form>
+          </div>
           </dialog>
-        )}
-        <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} isChangeSubmit={isChangeSubmit} setIsChangeSubmit={setIsChangeSubmit} />
-      </main>
-    );
+    )
   }
-  
-  return <Loading />;
+  <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} isChangeSubmit={isChangeSubmit} setIsChangeSubmit={setIsChangeSubmit} />
+      </main >
+    );
+}
+
+return <Loading />;
 }
 
 const Rutas = [

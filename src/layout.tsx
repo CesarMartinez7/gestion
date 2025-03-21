@@ -3,12 +3,12 @@ import Navbar from "./ui/navbar";
 import SiderBar from "./ui/sidebar";
 import Footer from "./ui/footer";
 
-const Layout = () => {
+const Layout = ({estaLogeado} : {estaLogeado: boolean}) => {
   return (
     <div className="layout">
       <Navbar />
       <div className="content">
-        <SiderBar />
+        <SiderBar estaLogeado={estaLogeado} />
       </div>
       <Footer/>
     </div>

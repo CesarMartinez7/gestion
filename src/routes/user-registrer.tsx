@@ -41,12 +41,13 @@ export default function UserRegistrer() {
       }
       console.log(data.data, data)
       setToken(data.data)
+      localStorage.setItem("token", data.data)
       window.alert(token)
     })
   };
 
   return (
-    <main className="grid place-content-center w-full h-full  ">
+    <main className="grid place-content-center w-full h-screen">
       <form onSubmit={(e) => {
         if (inputRefUserName.current?.value && inputRefUserPassword.current?.value) {
           handleSubmitLogin(e, inputRefUserName.current?.value, inputRefUserPassword.current?.value)
@@ -78,6 +79,7 @@ export default function UserRegistrer() {
           />
 
           <button className="btn btn-neutral mt-4">Iniciar Sesion</button>
+          <button className="btn btn-xs" >Cerrar sesion</button>
         </fieldset>
       </form>
     </main>

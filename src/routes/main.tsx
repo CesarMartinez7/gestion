@@ -6,11 +6,11 @@ const routers = [
   { name: "Historial", route: "historial" },
 ];
 
-export default function Main() {
+export default function Main({modo = "Invitado"} : {modo : string}) {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center text-center px-4">
       <h1 className="text-7xl font-extrabold mb-3">
-        <strong className="text-red-500">Gestión 5G</strong> eficiente y rápida 🚀
+        <strong className="text-red-500">Gestión 5G modo {modo}</strong> eficiente y rápida 🚀
       </h1>
       <p className="text-lg  mb-3">
         Administra pedidos, categorías e historial con facilidad.

@@ -32,7 +32,7 @@ const FormaterComponente = ({ opciones }: { opciones: Opciones }) => {
 
 }
 
-export default function PedidosComp() {
+export default function PedidosComp({token} : {token: string}) {
 
 
   const [data, setData] = useState<Pedidos>();
@@ -51,7 +51,11 @@ export default function PedidosComp() {
   // Traer los datos de popover de creacion productos
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/productos")
+    fetch("http://127.0.0.1:5000/productos",{
+      headers: {
+        "Authorization" : `Bearer ${token}`
+      }
+    })
       .then((response) => response.json())
       .then((pedidos) => setDataProductos(pedidos));
   }, []);
@@ -59,7 +63,11 @@ export default function PedidosComp() {
 
   // Pedidos Fetch principal
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/pedidos")
+    fetch("http://127.0.0.1:5000/pedidos", {
+      headers: {
+        "Authorization" : `Bearer ${token}`
+      }
+    })
       .then((reponse) => reponse.json())
       .then((pedidos) => {
         setData(pedidos);
@@ -133,6 +141,7 @@ export default function PedidosComp() {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
+                      "Authorization" : `Bearer ${token}`
                     },
                     body: JSON.stringify({
                       id_producto: idSelect,

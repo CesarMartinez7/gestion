@@ -19,7 +19,7 @@ interface UpdateProductos {
 
 
 
-export default function Productos({ name }: { name: string }) {
+export default function Productos({ name, token }: { name: string, token: string }) {
   const { inputRefCantidad, inputRefDescripcion, inputRefImagenes, inputRefNombre, isBig, isOpen, setIsOpen, setDataProductos, setIsBig, dataProductos, inputRefPrecio } = ProductosHooks();
 
   const [isSubmit, setIsSubmit] = useState<boolean>(false)
@@ -32,7 +32,11 @@ export default function Productos({ name }: { name: string }) {
   const [dataCategorias, setDataCategorias] = useState<Response>()
 
   const traerCategorias = async () => {
-    const response = await fetch("http://127.0.0.1:5000/categorias")
+    const response = await fetch("http://127.0.0.1:5000/categorias",{
+      headers: {
+        "Authorization" : `Bearer ${token}`
+      }
+    })
     const data = await response.json()
     if (data) {
       console.log(data)
@@ -55,6 +59,7 @@ export default function Productos({ name }: { name: string }) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization" : `Bearer ${token}`
       },
       body: JSON.stringify(updatedObject),
     }).then((response) => console.dir(response));
@@ -66,7 +71,11 @@ export default function Productos({ name }: { name: string }) {
   // Fetch de la interfaz productos fetch total
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/productos")
+    fetch("http://127.0.0.1:5000/productos",{
+      headers: {
+        "Authorization" : `Bearer ${token}`
+      }
+    })
       .then((response) => response.json())
       .then((pedidos) => setDataProductos(pedidos));
   }, [isSubmit]);
@@ -180,6 +189,9 @@ export default function Productos({ name }: { name: string }) {
 
                 fetch("http://127.0.0.1:5000/ingresar_productos", {
                   method: "POST",
+                  headers: {
+                    "Authorization": `Bearer ${token}`
+                  },
                   body: datosFomularios, // Pasar FormData en el cuerpo de la solicitud
                 })
                   .then((response) => {
