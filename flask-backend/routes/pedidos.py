@@ -7,7 +7,7 @@ from utils.auth import require_auth
 pedidos = Blueprint('pedidos', __name__)
 
 @pedidos.route('/pedidos', methods=['GET'])
-
+@require_auth
 def obtener_pedidos():
     pedidos = PedidosQuery.obtener_pedidos()
     pedidos_lista = [
@@ -22,7 +22,7 @@ def obtener_pedidos():
     return respuesta_success(pedidos_lista)
 
 @pedidos.route('/cambiar_estado_pedidos', methods=['PUT'])
-
+@require_auth
 def cambiar_estado_pedido():
     try:
         valores_pedidos = {
@@ -43,7 +43,7 @@ def cambiar_estado_pedido():
         return jsonify({"error": str(e)}), 400
     
 @pedidos.route('/crear_pedido', methods=['POST'])
-
+@require_auth
 def crear_pedido():
     try:
         valores_pedidos = {

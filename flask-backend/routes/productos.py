@@ -12,6 +12,7 @@ UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Asegurarte de que la carpeta exista
 
 @productos.route('/productos', methods=['GET'])
+@require_auth
 def obtener_productos():
     try:
         productos_lista = ProductosQuery.obtener_productos()
@@ -32,6 +33,7 @@ def obtener_productos():
         return jsonify(str(e)), 400
 
 @productos.route('/ingresar_productos', methods=['POST'])
+@require_auth
 def ingresar_producto():
     try:
         # Obtener los valores del formulario (texto)
@@ -73,6 +75,7 @@ def ingresar_producto():
         return jsonify(str(e)), 400
 
 @productos.route('/actualizar_productos', methods=['PUT'])
+@require_auth
 def actualizar_producto():
     try:
         # Obtener datos del cuerpo de la solicitud
@@ -100,6 +103,7 @@ def actualizar_producto():
         return jsonify(str(e)), 400
 
 @productos.route('/cambiar_estado_productos', methods=['PUT'])
+@require_auth
 def cambiar_estado_producto():
     try:
         valores_productos = {

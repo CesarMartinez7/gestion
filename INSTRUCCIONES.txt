@@ -1,0 +1,33 @@
+Primordial 🥇
+
+// Crear el token con el login ::: El token demora 1 hora 
+
+// Pasar el token a una variable global // Estado global = Hecho en zustand 
+
+// Tener un estado IsLogged que sea booleano y determine en cada hora si el token sigue activo
+
+// If se tiene el token pasar el token como Bearer en los Headers de fetch /// PENSANDO EN MIGRAR A AXIOS
+
+// Hacer las peticiones con el token generado globalmente // Zustand o crear un context 
+
+// Opciones para pasar el token,, pasarlo como props dentro del global
+
+// Crear dos auth, sea un render por si esta autenticado que dertermine si el token sigue activo y tambien si se encuentra en el tiempo de Desde javascript
+
+// Un contador de uso para saber cuanto tiempo le queda al admin
+
+
+Mejoras ✅
+
+
+// Cosas a implementar despues: Generar token si necesidad se volverse a logear.
+
+// Tener la verificacion del Token , Tiempo 
+
+// Dejar el token Guardado en localStorage // SESSION STORAGE //  => FINAL Y MAS SEGURO ===> COOKIES SEGURAS
+
+
+
+// Implementar el login como principal, o Mejor dicho indexarlo
+
+// Crear dos rutas la de Usurio sin registrar y la de registrado

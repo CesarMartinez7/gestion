@@ -212,7 +212,7 @@ export default function PedidosComp() {
           </thead>
           <tbody>
             {data?.data.map((item, index) => (
-              <ItemTable item={item} index={index} key={item.id_pedido} isBig={isBig} />
+              <ItemTable item={item} index={index} key={item.id_pedido}  />
             ))}
           </tbody>
         </table>
@@ -230,7 +230,7 @@ export default function PedidosComp() {
 }
 
 
-const ItemTable = ({ item, index  }: { item: Data, index: number}) => {
+const ItemTable = ({ item, index }: { item: Data, index: number}) => {
 
 
   // Estados de actualizar o para ver las modales

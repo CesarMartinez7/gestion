@@ -9,13 +9,6 @@ import NotData from "../ui/notdata";
 import { motion } from "motion/react"
 
 
-
-
-
-
-
-
-
 const Table = ({
   Data,
   handleModalOpen,
@@ -102,6 +95,7 @@ const Table = ({
                               method: "PUT",
                               headers: {
                                 "Content-Type": "application/json",
+                                "Authorization":  ""
                               },
                               body: JSON.stringify({
                                 estado: 2,
@@ -150,11 +144,6 @@ export default function Categorias() {
     setIsBig
   ] = CategoriaHooks();
 
-
-
-
-
-
   const [isOpenPopoverCreate, setIsOpenCreatePopover] =
     useState<boolean>(false);
 
@@ -166,7 +155,12 @@ export default function Categorias() {
 
   // Petición para cargar las categorías
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/categorias")
+    fetch("http://127.0.0.1:5000/categorias",{
+      headers: {
+        "Content-Type" : "application/json",
+        'Authorization': "Bearer d7eaabf1266596b22b64b511caf21bff6ad597e71d45373cb8dec7a4814ca3d5 "
+      }
+    })
       .then((response) => response.json())
       .then((data) => setData(data));
   }, [isChangeSubmit]);  // Dependemos de isChasngeSubmit
@@ -191,8 +185,6 @@ export default function Categorias() {
   }, [responseIsError]);
 
 
-
-
   const handleModalOpen = (index: number) => {
     setSelectedCategory(data?.data[index] || null);
     setIsModalOpen(true);
@@ -204,6 +196,8 @@ export default function Categorias() {
   };
 
   // Si tenemos datos, renderizamos
+
+
   if (data) {
     return (
       <main className="flex flex-col gap-2 px-8">

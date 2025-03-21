@@ -8,8 +8,8 @@ categorias = Blueprint('categorias', __name__)
 
 
 @categorias.route('/categorias', methods=['GET'])
+@require_auth
 def obtener_Categorias():
-
     categoria = CategoriasQuery.obtener_categorias()
     categorias_lista = [
         {
@@ -22,7 +22,7 @@ def obtener_Categorias():
     return respuesta_success(categorias_lista)
 
 @categorias.route('/ingresar_categorias', methods=['POST'])
-
+@require_auth
 def ingresar_categoria():
     try:
         valores_categorias = {
@@ -42,7 +42,7 @@ def ingresar_categoria():
     except Exception as e:
         return jsonify(str(e)), 400
 @categorias.route('/actualizar_categorias', methods=['PUT'])	
-
+@require_auth
 def actualizar_categoria():
     try:
         valores_categorias = {
@@ -67,7 +67,7 @@ def actualizar_categoria():
 
 
 @categorias.route('/cambiar_estado_categorias', methods=['PUT'])
-
+@require_auth
 
 # Cambiar estado de la categoria
 
