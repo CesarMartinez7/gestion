@@ -2,13 +2,10 @@ import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Layout from "./layout";
 import { Main, Pedidos, Productos, Categorias, NotFoundPage, Login } from "./routes/lazy-routes";
-import Historial from "./routes/historial";
+
 import Loading from "./ui/loading";
 import { Suspense, useEffect, useState } from "react";
-import { createContext } from "react";
 
-// Contexto de autenticación
-const TokenAuth = createContext(null);
 
 export default function App() {
   const [isLog, setIsLog] = useState<boolean>(false);
@@ -27,11 +24,11 @@ export default function App() {
     }
   }, []); // Solo se ejecuta una vez cuando el componente se monta
 
-  // Esta función se ejecuta cuando el usuario hace login
+  
   const handleLogin = (newToken: string) => {
-    localStorage.setItem("token", newToken); // Guardamos el token en localStorage
+    localStorage.setItem("token", newToken); 
     setToken(newToken);
-    setIsLog(true); // Actualizamos el estado para indicar que el usuario está logueado
+    setIsLog(true); 
   };
 
   // Si el token es válido, cargamos las rutas protegidas

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import Red5GLogowhite from "../assets/red5gLogoWhite.png";
 import Red5gLogoBlack from "../assets/red5gLogoBlack.png";
-import { useNavigate } from "react-router-dom";
 import useThemeStore from "../stores/theme-store";
 
 interface ResponseToken {
@@ -19,10 +18,10 @@ export default function UserRegistrer() {
   const [isBad, setIsBad] = useState<boolean>(false);
 
 
-  const {theme,toggleTheme} = useThemeStore()
+  const {theme} = useThemeStore()
   
 
-  const [token, setToken] = useState<string>("");
+  const [ token,setToken] = useState<string>("");
 
   
 
@@ -99,7 +98,7 @@ export default function UserRegistrer() {
           </button>
         </fieldset>
       </form>
-          <button onClick={toggleTheme}>Theme</button >
+        
     </main>
   );
 }

@@ -30,12 +30,12 @@ export default function SiderBar({estaLogeado} : {estaLogeado:  boolean}) {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu bg-base-200 text-base-content min-h-full w-72 p-4">
+          <ul className="menu bg-base-200 text-base-content min-h-full w-62 p-4">
             <ul className="menu bg-base-200 rounded-box w-56">
               <li>
                 <a className="flex justify-between">
                   <span className="flex gap-2">
-                    <Icon icon="lucide:database" width="20" height="20" /> Opciones
+                    <Icon icon="lucide:database" width="16" height="16" /> Opciones
                   </span>
                   <Icon icon="lucide:chevron-down" width="24" height="24" />{" "}
                 </a>

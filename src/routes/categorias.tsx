@@ -286,7 +286,7 @@ export default function Categorias({ token }: { token: string }) {
                   placeholder="Tecnologías"
                   required
                 />
-
+                
                 <label htmlFor="descripcion" className="font-medium text-sm">
                   Descripción
                 </label>
@@ -383,7 +383,7 @@ export default function Categorias({ token }: { token: string }) {
           </dialog>
     )
   }
-  <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} isChangeSubmit={isChangeSubmit} setIsChangeSubmit={setIsChangeSubmit} />
+  <Table Data={data} handleModalOpen={handleModalOpen} isBig={isBig} token ={token}isChangeSubmit={isChangeSubmit} setIsChangeSubmit={setIsChangeSubmit} />
       </main >
     );
 }

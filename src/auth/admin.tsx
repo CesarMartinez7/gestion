@@ -16,9 +16,9 @@ export default function Admin() {
     <Suspense fallback={<Loading />}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Layout estaLogeado={true} />}>
             <Route index element={<Main modo="Admin" />} />
-            <Route path="categorias" element={<Categorias />} />
+            <Route path="categorias" element={<Categorias  />} />
             <Route path="historial" element={<Historial />} />
             <Route path="pedidos" element={<Pedidos />} />
             <Route path="productos" element={<Productos name="Productos" />} />
